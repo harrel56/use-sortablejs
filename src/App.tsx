@@ -1,4 +1,3 @@
-import './App.css';
 import Container from './Container';
 import {useState} from 'react';
 

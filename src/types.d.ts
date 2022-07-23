@@ -55,7 +55,7 @@ export interface Options<T> extends Sortable.Options {
   /**
    * Event when you move an item in the list or between lists
    */
-  onMove?: ((evt: MoveEvent, originalEvent: Event) => boolean | -1 | 1 | void) | undefined;
+  onMove?: ((evt: MoveEventExtended<T>, originalEvent: Event) => boolean | -1 | 1 | void) | undefined;
   /**
    * Called when dragging element changes position
    */
@@ -63,5 +63,9 @@ export interface Options<T> extends Sortable.Options {
 }
 
 export interface SortableEventExtended<T> extends SortableEvent {
+  stateItem: T
+}
+
+export interface MoveEventExtended<T> extends MoveEvent {
   stateItem: T
 }
