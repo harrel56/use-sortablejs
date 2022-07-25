@@ -1,11 +1,21 @@
 const path = require('path');
 
 module.exports = {
-  mode: "development",
-  entry: './src/index.tsx',
+  mode: 'development',
+  entry: {
+    'react-sortablejs': '@react-sortablejs/Sortable.tsx',
+    'examples': '@examples/App.tsx'
+  },
   output: {
-    filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].js',
+    path: path.resolve(__dirname, 'build'),
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
+    alias: {
+      '@react-sortablejs': path.resolve(__dirname, './src'),
+      '@examples': path.resolve(__dirname, './examples/src')
+    }
   },
   module: {
     rules: [
@@ -15,11 +25,5 @@ module.exports = {
         exclude: /node_modules/
       },
     ],
-  },
-  resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
-    alias: {
-      src: path.resolve(__dirname, './src')
-    }
   },
 };

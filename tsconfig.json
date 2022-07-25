@@ -5,6 +5,10 @@
     "sourceMap": true,
     "jsx": "react-jsx",
     "baseUrl": ".",
+    "paths": {
+      "@react-sortablejs/*": ["src/*"],
+      "@examples/*": ["examples/src/*"]
+    },
     "allowJs": true, // Allow JavaScript files to be compiled
     "skipLibCheck": true, // Skip type checking of all declaration files
     "esModuleInterop": true, // Disables namespace imports (import * as fs from "fs") and enables CJS/AMD/UMD style imports (import fs from "fs")
@@ -19,7 +23,7 @@
     "noUnusedLocals": true, // Report errors on unused locals
     "noUnusedParameters": true, // Report errors on unused parameters
     "incremental": true, // Enable incremental compilation by reading/writing information from prior compilations to a file on disk
-    "noFallthroughCasesInSwitch": true,
+    "noFallthroughCasesInSwitch": true
   },
   "exclude": [
     "node_modules",

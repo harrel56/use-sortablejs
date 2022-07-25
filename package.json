@@ -5,10 +5,10 @@
     "build": "webpack"
   },
   "dependencies": {
-    "bi-directional-map": "1.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "sortablejs": "1.15.0"
+    "sortablejs": "1.15.0",
+    "bi-directional-map": "1.0.0"
   },
   "devDependencies": {
     "@types/react": "18.0.15",

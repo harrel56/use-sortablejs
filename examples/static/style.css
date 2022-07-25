@@ -16,6 +16,30 @@ code {
 
 .app {
   display: flex;
+  flex-direction: column;
+  gap: 20px
+}
+
+.example {
+  display: flex;
   justify-content: space-evenly;
+}
+
+.example > div {
+  flex-grow: 1;
+  text-align: center;
+  background: #182c34;
+}
+
+.nested {
+  background: #ccc;
+}
+
+.nested .nested {
+  background: #aaa;
+}
+
+.nested .nested .nested {
+  background: #888;
 }
 

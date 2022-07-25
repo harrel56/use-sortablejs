@@ -1,23 +1,22 @@
-import {RefCallback, useCallback, useEffect, useMemo, useRef} from 'react';
-import Sortable, {SortableEvent} from 'sortablejs'
+import {RefCallback, useCallback, useContext, useEffect, useMemo, useRef} from 'react';
+import SortableJS, {SortableEvent} from 'sortablejs'
 import {MoveEventExtended, Props, SortableEventExtended} from './types';
 import {BiDirectionalMap} from 'bi-directional-map/dist';
+import {SmartArray} from '@react-sortablejs/utils';
+import {SortableContext} from '@react-sortablejs/SortableProvider';
 
+const Sortable = <T, >({items, itemToView, options}: Props<T>) => {
+  const sortableCtx = useContext(SortableContext)
+  if (!sortableCtx) {
+    throw new Error('Missing Sortable context')
+  }
+  const {registerSortable, findItem} = sortableCtx
 
-const moveInArray = <T, >(arr: T[], fromIndex: number, toIndex: number) => {
-  const copy = [...arr]
-  const element = copy[fromIndex]
-  copy.splice(fromIndex, 1)
-  copy.splice(toIndex, 0, element)
-  return copy
-}
-
-const Container = <T, >({items, itemToView, options}: Props<T>) => {
-  const itemsDataRef = useRef(items)
-  const itemRefs = useRef<BiDirectionalMap<HTMLElement, T>>(new BiDirectionalMap())
+  const itemsDataRef = useRef(new SmartArray(items))
+  const itemRefs = useRef(new BiDirectionalMap<HTMLElement, T>)
 
   useEffect(() => {
-    itemsDataRef.current = items
+    itemsDataRef.current = new SmartArray(items)
   }, [items])
 
   const getChildRefCallback = ((item) => {
@@ -32,7 +31,7 @@ const Container = <T, >({items, itemToView, options}: Props<T>) => {
 
   const extendSortableEvent = (e: SortableEvent) => {
     const extended = e as SortableEventExtended<T>
-    extended.stateItem = itemRefs.current.getValue(e.item)!
+    extended.stateItem = findItem(e.from, e.item)
     return extended
   }
 
@@ -45,7 +44,8 @@ const Container = <T, >({items, itemToView, options}: Props<T>) => {
       return
     }
 
-    Sortable.create(node, {
+    registerSortable(node, itemRefs.current)
+    SortableJS.create(node, {
       ...options,
       onStart: e => {
         console.log('onStart', e)
@@ -57,7 +57,10 @@ const Container = <T, >({items, itemToView, options}: Props<T>) => {
       },
       onAdd: e => {
         console.log('onAdd', e)
-        options?.onAdd?.(extendSortableEvent(e))
+        const extended = extendSortableEvent(e);
+        options?.onAdd?.(extended)
+        // extended.item.remove()
+        options?.onItemsChange?.(itemsDataRef.current.add(extended.stateItem, e.newIndex!))
       },
       onClone: e => {
         console.log('onClone', e)
@@ -74,14 +77,17 @@ const Container = <T, >({items, itemToView, options}: Props<T>) => {
       onUpdate: e => {
         console.log('onUpdate', e)
         options?.onUpdate?.(extendSortableEvent(e))
+        options?.onItemsChange?.(itemsDataRef.current.moveItem(e.oldIndex!, e.newIndex!))
       },
       onSort: e => {
         console.log('onSort', e)
-        options?.onItemsChange?.(moveInArray(itemsDataRef.current, e.oldIndex!, e.newIndex!))
+        options?.onSort?.(extendSortableEvent(e))
       },
       onRemove: e => {
         console.log('onRemove', e)
         options?.onRemove?.(extendSortableEvent(e))
+        node.insertBefore(e.item, null)
+        options?.onItemsChange?.(itemsDataRef.current.remove(e.oldIndex!))
       },
       onFilter: e => {
         console.log('onFilter', e)
@@ -101,16 +107,19 @@ const Container = <T, >({items, itemToView, options}: Props<T>) => {
   }, []) as RefCallback<HTMLElement>
 
   return (
-    <div ref={refCallback}>
-      {itemsWithView.map(({item, view}) => (
-        <view.type
-          {...view.props}
-          key={view.key}
-          ref={getChildRefCallback(item)}
-        />
-      ))}
-    </div>
+    <>
+      <button onClick={() => options?.onItemsChange?.(itemsDataRef.current.get())}>setItems</button>
+      <div ref={refCallback}>
+        {itemsWithView.map(({item, view}) => (
+          <view.type
+            {...view.props}
+            key={view.key}
+            ref={getChildRefCallback(item)}
+          />
+        ))}
+      </div>
+    </>
   )
 }
 
-export default Container
+export default Sortable
