@@ -5,7 +5,7 @@ import {BiDirectionalMap} from 'bi-directional-map/dist';
 import {SmartArray} from '@react-sortablejs/utils';
 import {SortableContext} from '@react-sortablejs/SortableProvider';
 
-const Sortable = <T, >({items, itemToView, options}: Props<T>) => {
+const Sortable = <T, >({items, setItems, itemToView, options}: Props<T>) => {
   const sortableCtx = useContext(SortableContext)
   if (!sortableCtx) {
     throw new Error('Missing Sortable context')
@@ -60,7 +60,7 @@ const Sortable = <T, >({items, itemToView, options}: Props<T>) => {
         const extended = extendSortableEvent(e);
         options?.onAdd?.(extended)
         // extended.item.remove()
-        options?.onItemsChange?.(itemsDataRef.current.add(extended.stateItem, e.newIndex!))
+        setItems(itemsDataRef.current.add(extended.stateItem, e.newIndex!))
       },
       onClone: e => {
         console.log('onClone', e)
@@ -77,7 +77,7 @@ const Sortable = <T, >({items, itemToView, options}: Props<T>) => {
       onUpdate: e => {
         console.log('onUpdate', e)
         options?.onUpdate?.(extendSortableEvent(e))
-        options?.onItemsChange?.(itemsDataRef.current.moveItem(e.oldIndex!, e.newIndex!))
+        setItems(itemsDataRef.current.moveItem(e.oldIndex!, e.newIndex!))
       },
       onSort: e => {
         console.log('onSort', e)
@@ -87,7 +87,7 @@ const Sortable = <T, >({items, itemToView, options}: Props<T>) => {
         console.log('onRemove', e)
         options?.onRemove?.(extendSortableEvent(e))
         node.insertBefore(e.item, null)
-        options?.onItemsChange?.(itemsDataRef.current.remove(e.oldIndex!))
+        setItems(itemsDataRef.current.remove(e.oldIndex!))
       },
       onFilter: e => {
         console.log('onFilter', e)
@@ -108,7 +108,7 @@ const Sortable = <T, >({items, itemToView, options}: Props<T>) => {
 
   return (
     <>
-      <button onClick={() => options?.onItemsChange?.(itemsDataRef.current.get())}>setItems</button>
+      {/*<button onClick={() => setItems(itemsDataRef.current.get())}>setItems</button>*/}
       <div ref={refCallback}>
         {itemsWithView.map(({item, view}) => (
           <view.type

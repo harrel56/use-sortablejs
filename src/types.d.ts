@@ -3,63 +3,60 @@ import Sortable, {MoveEvent, SortableEvent} from 'sortablejs';
 
 export interface Props<T> {
   items: T[]
+  setItems: (items: T[]) => void
   itemToView: (item: T) => ReactElement
   options?: Options<T>
 }
 
 export interface Options<T> extends Sortable.Options {
   /**
-   * Additional event when items state changed and should be updated
-   */
-  onItemsChange?: ((items: T[]) => void) | undefined;
-  /**
    * Element dragging started
    */
-  onStart?: ((event: SortableEventExtended<T>) => void) | undefined;
+  onStart?: (event: SortableEventExtended<T>) => void
   /**
    * Element dragging ended
    */
-  onEnd?: ((event: SortableEventExtended<T>) => void) | undefined;
+  onEnd?: (event: SortableEventExtended<T>) => void
   /**
    * Element is dropped into the list from another list
    */
-  onAdd?: ((event: SortableEventExtended<T>) => void) | undefined;
+  onAdd?: (event: SortableEventExtended<T>) => void
   /**
    * Created a clone of an element
    */
-  onClone?: ((event: SortableEventExtended<T>) => void) | undefined;
+  onClone?: (event: SortableEventExtended<T>) => void
   /**
    * Element is chosen
    */
-  onChoose?: ((event: SortableEventExtended<T>) => void) | undefined;
+  onChoose?: (event: SortableEventExtended<T>) => void
   /**
    * Element is unchosen
    */
-  onUnchoose?: ((event: SortableEventExtended<T>) => void) | undefined;
+  onUnchoose?: (event: SortableEventExtended<T>) => void
   /**
    * Changed sorting within list
    */
-  onUpdate?: ((event: SortableEventExtended<T>) => void) | undefined;
+  onUpdate?: (event: SortableEventExtended<T>) => void
   /**
    * Called by any change to the list (add / update / remove)
    */
-  onSort?: ((event: SortableEventExtended<T>) => void) | undefined;
+  onSort?: (event: SortableEventExtended<T>) => void
   /**
    * Element is removed from the list into another list
    */
-  onRemove?: ((event: SortableEventExtended<T>) => void) | undefined;
+  onRemove?: (event: SortableEventExtended<T>) => void
   /**
    * Attempt to drag a filtered element
    */
-  onFilter?: ((event: SortableEventExtended<T>) => void) | undefined;
+  onFilter?: (event: SortableEventExtended<T>) => void
   /**
    * Event when you move an item in the list or between lists
    */
-  onMove?: ((evt: MoveEventExtended<T>, originalEvent: Event) => boolean | -1 | 1 | void) | undefined;
+  onMove?: (evt: MoveEventExtended<T>, originalEvent: Event) => boolean | -1 | 1 | void
   /**
    * Called when dragging element changes position
    */
-  onChange?: ((evt: SortableEventExtended<T>) => void) | undefined;
+  onChange?: (evt: SortableEventExtended<T>) => void
 }
 
 export interface SortableEventExtended<T> extends SortableEvent {

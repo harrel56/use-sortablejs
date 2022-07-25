@@ -1,11 +1,13 @@
 import ReactDOM from 'react-dom/client';
-import DoubleList from '@examples/DoubleList';
+import SharedList from '@examples/SharedList';
 import NestedList from '@examples/NestedList';
+import SimpleList from '@examples/SimpleList';
 
 function App() {
   return (
-    <div className="app">
-      <DoubleList/>
+    <div className="container">
+      <SimpleList />
+      <SharedList/>
       <NestedList/>
     </div>
   );

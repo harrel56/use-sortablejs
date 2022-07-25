@@ -5,8 +5,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #282c34;
-  color: white;
 }
 
 code {
@@ -14,21 +12,43 @@ code {
     monospace;
 }
 
-.app {
+.container {
   display: flex;
   flex-direction: column;
-  gap: 20px
+  gap: 3em;
+}
+
+.example-container {
+  display: flex;
+  flex-direction: column;
 }
 
 .example {
   display: flex;
-  justify-content: space-evenly;
+  gap: 40px;
 }
 
-.example > div {
-  flex-grow: 1;
-  text-align: center;
-  background: #182c34;
+.example > * {
+  flex: 1 0 0;
+}
+
+.item {
+  padding: 6px 16px;
+  background: #f4f5f6;
+  border-width: 1px 1px 0 1px;
+  border-color: #e1e2e3;
+  border-style: solid;
+}
+
+.item:first-child {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.item:last-child {
+  border-bottom-width: 1px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 .nested {
