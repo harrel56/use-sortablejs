@@ -1,4 +1,4 @@
-import {RefCallback, useCallback, useContext, useEffect, useMemo, useRef} from 'react';
+import {ElementType, RefCallback, useCallback, useContext, useEffect, useMemo, useRef} from 'react';
 import SortableJS, {SortableEvent} from 'sortablejs'
 import {MoveEventExtended, Props, SortableEventExtended} from './types';
 import {BiDirectionalMap} from 'bi-directional-map/dist';
@@ -13,7 +13,15 @@ const shallowClone = (item: any) => {
   }
 }
 
-const Sortable = <T, >({items, setItems, itemToView, cloneItem = shallowClone, options}: Props<T>) => {
+const Sortable = <T, >({
+                         items,
+                         setItems,
+                         itemToView,
+                         cloneItem = shallowClone,
+                         component = 'div',
+                         componentProps = {},
+                         options
+                       }: Props<T>) => {
   const sortableCtx = useContext(SortableContext)
   if (!sortableCtx) {
     throw new Error('Missing Sortable context')
@@ -124,10 +132,11 @@ const Sortable = <T, >({items, setItems, itemToView, cloneItem = shallowClone, o
     })
   }, []) as RefCallback<HTMLElement>
 
+  const Root: ElementType = component
   return (
     <>
       {/*<button onClick={() => setItems(itemsDataRef.current.get())}>setItems</button>*/}
-      <div ref={refCallback}>
+      <Root ref={refCallback} {...componentProps}>
         {itemsWithView.map(({item, view}) => (
           <view.type
             {...view.props}
@@ -135,7 +144,7 @@ const Sortable = <T, >({items, setItems, itemToView, cloneItem = shallowClone, o
             ref={getChildRefCallback(item)}
           />
         ))}
-      </div>
+      </Root>
     </>
   )
 }

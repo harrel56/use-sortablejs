@@ -1,4 +1,4 @@
-import {ReactElement} from 'react';
+import {ComponentPropsWithoutRef, ElementType, ReactElement} from 'react';
 import Sortable, {MoveEvent, SortableEvent} from 'sortablejs';
 
 export interface Props<T> {
@@ -6,6 +6,8 @@ export interface Props<T> {
   setItems: (items: T[]) => void
   itemToView: (item: T) => ReactElement
   cloneItem?: (item: T) => T
+  component?: ElementType
+  componentProps?: ComponentPropsWithoutRef<ElementType>
   options?: Options<T>
 }
 

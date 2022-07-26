@@ -3,6 +3,7 @@ import SharedList from '@examples/SharedList';
 import NestedList from '@examples/NestedList';
 import SimpleList from '@examples/SimpleList';
 import CloningList from '@examples/CloningList';
+import GridList from '@examples/GridList';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <SimpleList/>
       <SharedList/>
       <CloningList/>
+      <GridList/>
       <NestedList/>
     </div>
   );
