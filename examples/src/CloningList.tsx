@@ -1,8 +1,8 @@
-import {useState} from 'react';
+import {useRef, useState} from 'react';
 import Sortable from '@react-sortablejs/Sortable';
 import SortableProvider from '@react-sortablejs/SortableProvider';
 
-const SharedList = () => {
+const CloningList = () => {
   const [items, setItems] = useState([
     'Item 1',
     'Item 2',
@@ -16,20 +16,25 @@ const SharedList = () => {
     'Item 7',
     'Item 8'
   ])
+  const cloneCount = useRef(0)
 
   return (
     <SortableProvider>
       <div className="example-container">
-        <h2>Shared lists</h2>
+        <h2>Cloning</h2>
         <div className="example">
           <Sortable items={items}
                     setItems={setItems}
                     itemToView={
                       item => <div className='item' key={item}>{item}</div>
                     }
+                    cloneItem={item => `${item} (cloned ${++cloneCount.current})`}
                     options={{
                       animation: 150,
-                      group: 'shared'
+                      group: {
+                        name: 'cloning',
+                        pull: 'clone'
+                      }
                     }}
           />
           <Sortable items={items2}
@@ -37,9 +42,13 @@ const SharedList = () => {
                     itemToView={
                       item => <div className='item' key={item}>{item}</div>
                     }
+                    cloneItem={item => `${item} (cloned ${++cloneCount.current})`}
                     options={{
                       animation: 150,
-                      group: 'shared'
+                      group: {
+                        name: 'cloning',
+                        pull: 'clone'
+                      }
                     }}
           />
         </div>
@@ -48,4 +57,4 @@ const SharedList = () => {
   );
 }
 
-export default SharedList;
+export default CloningList;

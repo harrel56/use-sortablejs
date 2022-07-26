@@ -5,7 +5,15 @@ import {BiDirectionalMap} from 'bi-directional-map/dist';
 import {SmartArray} from '@react-sortablejs/utils';
 import {SortableContext} from '@react-sortablejs/SortableProvider';
 
-const Sortable = <T, >({items, setItems, itemToView, options}: Props<T>) => {
+const shallowClone = (item: any) => {
+  if (typeof item === 'object') {
+    return {...item}
+  } else {
+    return item
+  }
+}
+
+const Sortable = <T, >({items, setItems, itemToView, cloneItem = shallowClone, options}: Props<T>) => {
   const sortableCtx = useContext(SortableContext)
   if (!sortableCtx) {
     throw new Error('Missing Sortable context')
@@ -32,6 +40,9 @@ const Sortable = <T, >({items, setItems, itemToView, options}: Props<T>) => {
   const extendSortableEvent = (e: SortableEvent) => {
     const extended = e as SortableEventExtended<T>
     extended.stateItem = findItem(e.from, e.item)
+    if (e.pullMode === 'clone') {
+      extended.stateItem = cloneItem(extended.stateItem)
+    }
     return extended
   }
 
@@ -59,7 +70,12 @@ const Sortable = <T, >({items, setItems, itemToView, options}: Props<T>) => {
         console.log('onAdd', e)
         const extended = extendSortableEvent(e);
         options?.onAdd?.(extended)
-        // extended.item.remove()
+        if (e.pullMode === 'clone') {
+          e.clone.parentElement!.insertBefore(e.item, e.clone.nextSibling)
+          e.clone.remove()
+        } else {
+          e.item.remove()
+        }
         setItems(itemsDataRef.current.add(extended.stateItem, e.newIndex!))
       },
       onClone: e => {
@@ -86,8 +102,10 @@ const Sortable = <T, >({items, setItems, itemToView, options}: Props<T>) => {
       onRemove: e => {
         console.log('onRemove', e)
         options?.onRemove?.(extendSortableEvent(e))
-        node.insertBefore(e.item, null)
-        setItems(itemsDataRef.current.remove(e.oldIndex!))
+        if (e.pullMode !== 'clone') {
+          node.insertBefore(e.item, null)
+          setItems(itemsDataRef.current.remove(e.oldIndex!))
+        }
       },
       onFilter: e => {
         console.log('onFilter', e)

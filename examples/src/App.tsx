@@ -2,12 +2,14 @@ import ReactDOM from 'react-dom/client';
 import SharedList from '@examples/SharedList';
 import NestedList from '@examples/NestedList';
 import SimpleList from '@examples/SimpleList';
+import CloningList from '@examples/CloningList';
 
 function App() {
   return (
     <div className="container">
-      <SimpleList />
+      <SimpleList/>
       <SharedList/>
+      <CloningList/>
       <NestedList/>
     </div>
   );

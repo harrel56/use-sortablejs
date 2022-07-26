@@ -5,6 +5,7 @@ export interface Props<T> {
   items: T[]
   setItems: (items: T[]) => void
   itemToView: (item: T) => ReactElement
+  cloneItem?: (item: T) => T
   options?: Options<T>
 }
 
