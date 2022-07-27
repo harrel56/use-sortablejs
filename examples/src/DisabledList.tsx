@@ -2,7 +2,7 @@ import {useRef, useState} from 'react';
 import Sortable from '@react-sortablejs/Sortable';
 import SortableProvider from '@react-sortablejs/SortableProvider';
 
-const CloningList = () => {
+const DisabledList = () => {
   const idx = useRef(0)
   const [items, setItems] = useState([
     {name: 'Item 1', id: ++idx.current},
@@ -21,20 +21,20 @@ const CloningList = () => {
   return (
     <SortableProvider>
       <div className="example-container">
-        <h2>Cloning</h2>
+        <h2>Disabling sorting</h2>
         <div className="example">
           <Sortable items={items}
                     setItems={setItems}
                     itemToView={
                       item => <div className='item' key={item.id}>{item.name}</div>
                     }
-                    cloneItem={item => ({...item, id: ++idx.current})}
                     options={{
                       animation: 150,
                       group: {
-                        name: 'cloning',
-                        pull: 'clone'
-                      }
+                        name: 'disabled',
+                        pull: 'clone',
+                        put: false
+                      },
                     }}
           />
           <Sortable items={items2}
@@ -45,10 +45,7 @@ const CloningList = () => {
                     cloneItem={item => ({...item, id: ++idx.current})}
                     options={{
                       animation: 150,
-                      group: {
-                        name: 'cloning',
-                        pull: 'clone'
-                      }
+                      group: 'disabled'
                     }}
           />
         </div>
@@ -57,4 +54,4 @@ const CloningList = () => {
   );
 }
 
-export default CloningList;
+export default DisabledList;

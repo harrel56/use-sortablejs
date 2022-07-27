@@ -42,6 +42,7 @@ code {
   border-width: 1px 1px 0 1px;
   border-color: var(--border-color);
   border-style: solid;
+  user-select: none;
 }
 
 .item:first-child {
@@ -53,6 +54,17 @@ code {
   border-bottom-width: 1px;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
+}
+
+.handle::before {
+  content: '\266f';
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.filtered {
+  color: white;
+  background: #9b4dca;
 }
 
 .nested {
@@ -82,5 +94,6 @@ code {
   border-width: 1px;
   border-color: var(--border-color);
   border-style: solid;
+  user-select: none;
 }
 

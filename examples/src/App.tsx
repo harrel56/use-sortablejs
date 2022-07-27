@@ -4,6 +4,9 @@ import NestedList from '@examples/NestedList';
 import SimpleList from '@examples/SimpleList';
 import CloningList from '@examples/CloningList';
 import GridList from '@examples/GridList';
+import DisabledList from '@examples/DisabledList';
+import HandleList from '@examples/HandleList';
+import FilterList from '@examples/FilterList';
 
 function App() {
   return (
@@ -11,6 +14,9 @@ function App() {
       <SimpleList/>
       <SharedList/>
       <CloningList/>
+      <DisabledList/>
+      <HandleList/>
+      <FilterList/>
       <GridList/>
       <NestedList/>
     </div>
