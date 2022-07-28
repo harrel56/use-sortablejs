@@ -1,6 +1,6 @@
 import {useState} from 'react';
-import Sortable from '@react-sortablejs/Sortable';
-import SortableProvider from '@react-sortablejs/SortableProvider';
+import useSortable from '@react-sortablejs/useSortable';
+import {ItemProps} from '@react-sortablejs/types';
 
 interface Item {
   title: string
@@ -11,11 +11,11 @@ interface ListProps {
   itemsState: Item[]
 }
 
-const itemToView = (item: Item) => {
+const itemToView = <T extends Item, >(item: T, getItemProps: (item: T) => ItemProps) => {
   return (
-    <div className="item" key={item.title}>
+    <div className="item" key={item.title} {...getItemProps(item)}>
       {item.title}
-      <List itemsState={item.children} />
+      <List itemsState={item.children}/>
     </div>
   )
 }
@@ -27,15 +27,14 @@ const List = ({itemsState}: ListProps) => {
     itemsState.push(...newItems)
     setItems(newItems)
   }
+  const {getRootProps, getItemProps} = useSortable(items, setItemsInternal, {
+    animation: 150,
+    group: 'shared'
+  })
   return (
-    <Sortable items={items}
-              setItems={setItemsInternal}
-              itemToView={itemToView}
-              options={{
-                animation: 150,
-                group: 'nested'
-              }}
-    />
+    <div {...getRootProps()}>
+      {items.map(item => itemToView(item, getItemProps))}
+    </div>
   )
 }
 
@@ -55,7 +54,7 @@ const NestedList = () => {
           ]
         },
         {title: 'Item 1.3', children: []},
-        {title: 'Item 1.4', children: []},
+        {title: 'Item 1.4', children: []}
       ]
     },
     {title: 'Item 2', children: []},
@@ -69,23 +68,20 @@ const NestedList = () => {
         {title: 'Item 4.4', children: []}
       ]
     },
-    {title: 'Item 5', children: []},
+    {title: 'Item 5', children: []}
   ])
+  const {getRootProps, getItemProps} = useSortable(items, setItems, {
+    animation: 150,
+    group: 'shared'
+  })
 
   return (
-    <SortableProvider>
-      <div className="example-container">
-        <h2>Nested lists</h2>
-        <Sortable items={items}
-                  setItems={setItems}
-                  itemToView={itemToView}
-                  options={{
-                    animation: 150,
-                    group: 'nested'
-                  }}
-        />
+    <div className="example-container">
+      <h2>Nested list</h2>
+      <div {...getRootProps()}>
+        {items.map(item => itemToView(item, getItemProps))}
       </div>
-    </SortableProvider>
+    </div>
   );
 }
 

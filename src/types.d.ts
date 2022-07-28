@@ -1,21 +1,12 @@
-import {ComponentPropsWithoutRef, ElementType, ReactElement} from 'react';
+import {RefCallback} from 'react';
 import Sortable, {MoveEvent, SortableEvent} from 'sortablejs';
 
-export interface UseSortableOptions<T> {
-  items: T[]
-  setItems: (items: T[]) => void
-  cloneItem?: (item: T) => T
-  options?: Options<T>
+export interface RootProps {
+  ref: RefCallback<HTMLElement>
 }
 
-export interface Props<T> {
-  items: T[]
-  setItems: (items: T[]) => void
-  itemToView: (item: T) => ReactElement
-  cloneItem?: (item: T) => T
-  component?: ElementType
-  componentProps?: ComponentPropsWithoutRef<ElementType>
-  options?: Options<T>
+export interface ItemProps {
+  ref: RefCallback<HTMLElement>
 }
 
 export interface Options<T> extends Sortable.Options {

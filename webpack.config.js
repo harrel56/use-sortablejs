@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
   mode: 'development',
   entry: {
-    'react-sortablejs': '@react-sortablejs/Sortable.tsx',
+    'react-sortablejs': '@react-sortablejs/useSortable.ts',
     'examples': '@examples/App.tsx'
   },
   output: {

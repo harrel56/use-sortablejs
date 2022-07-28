@@ -1,6 +1,5 @@
-import Sortable from '@react-sortablejs/Sortable';
-import SortableProvider from '@react-sortablejs/SortableProvider';
 import {useState} from 'react';
+import useSortable from '@react-sortablejs/useSortable';
 
 const GridList = () => {
   const [items, setItems] = useState([
@@ -25,23 +24,15 @@ const GridList = () => {
     'Item 19',
     'Item 20'
   ])
+  const {getRootProps, getItemProps} = useSortable(items, setItems, {animation: 150})
 
   return (
-    <SortableProvider>
-      <div className="example-container">
-        <h2>Grid</h2>
-        <Sortable items={items}
-                  setItems={setItems}
-                  itemToView={
-                    item => <div className="grid-item" key={item}>{item}</div>
-                  }
-                  componentProps={{className: 'grid'}}
-                  options={{
-                    animation: 150
-                  }}
-        />
+    <div className="example-container">
+      <h2>Grid</h2>
+      <div className='grid' {...getRootProps()}>
+        {items.map(item => <div className="grid-item" key={item} {...getItemProps(item)}>{item}</div>)}
       </div>
-    </SortableProvider>
+    </div>
   )
 }
 

@@ -1,6 +1,5 @@
 import {useState} from 'react';
-import Sortable from '@react-sortablejs/Sortable';
-import SortableProvider from '@react-sortablejs/SortableProvider';
+import useSortable from '@react-sortablejs/useSortable';
 
 const SharedList = () => {
   const [items, setItems] = useState([
@@ -9,7 +8,6 @@ const SharedList = () => {
     'Item 3',
     'Item 4'
   ])
-
   const [items2, setItems2] = useState([
     'Item 5',
     'Item 6',
@@ -17,34 +15,27 @@ const SharedList = () => {
     'Item 8'
   ])
 
+  const {getRootProps, getItemProps} = useSortable(items, setItems, {
+    animation: 150,
+    group: 'shared'
+  })
+  const {getRootProps: getRootProps2, getItemProps: getItemProps2} = useSortable(items2, setItems2, {
+    animation: 150,
+    group: 'shared'
+  })
+
   return (
-    <SortableProvider>
-      <div className="example-container">
-        <h2>Shared lists</h2>
-        <div className="example">
-          <Sortable items={items}
-                    setItems={setItems}
-                    itemToView={
-                      item => <div className='item' key={item}>{item}</div>
-                    }
-                    options={{
-                      animation: 150,
-                      group: 'shared'
-                    }}
-          />
-          <Sortable items={items2}
-                    setItems={setItems2}
-                    itemToView={
-                      item => <div className='item' key={item}>{item}</div>
-                    }
-                    options={{
-                      animation: 150,
-                      group: 'shared'
-                    }}
-          />
+    <div className="example-container">
+      <h2>Shared lists</h2>
+      <div className="example">
+        <div {...getRootProps()}>
+          {items.map(item => <div className="item" key={item} {...getItemProps(item)}>{item}</div>)}
+        </div>
+        <div {...getRootProps2()}>
+          {items2.map(item => <div className="item" key={item} {...getItemProps2(item)}>{item}</div>)}
         </div>
       </div>
-    </SortableProvider>
+    </div>
   );
 }
 

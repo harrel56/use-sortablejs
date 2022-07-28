@@ -1,6 +1,5 @@
-import Sortable from '@react-sortablejs/Sortable';
-import SortableProvider from '@react-sortablejs/SortableProvider';
 import {useState} from 'react';
+import useSortable from '@react-sortablejs/useSortable';
 
 const FilterList = () => {
   const [items, setItems] = useState([
@@ -12,23 +11,17 @@ const FilterList = () => {
     {name: 'Item 5'},
     {name: 'Item 6'}
   ])
-
+  const {getRootProps, getItemProps} = useSortable(items, setItems, {animation: 150})
   return (
-    <SortableProvider>
-      <div className="example-container">
-        <h2>Simple list</h2>
-        <Sortable items={items}
-                  setItems={setItems}
-                  itemToView={
-                    item => <div className={item.filtered ? 'item filtered' : 'item'} key={item.name}>{item.name}</div>
-                  }
-                  options={{
-                    animation: 150,
-                    filter: '.filtered'
-                  }}
-        />
+    <div className="example-container">
+      <h2>Filter</h2>
+      <div {...getRootProps()}>
+        {items.map(item =>
+          <div className={item.filtered ? 'item filtered' : 'item'} key={item.name} {...getItemProps(item)}>
+            {item.name}
+          </div>)}
       </div>
-    </SortableProvider>
+    </div>
   )
 }
 

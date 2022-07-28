@@ -1,18 +1,22 @@
 import {RefCallback, useCallback, useContext, useEffect, useRef} from 'react';
-import SortableJS, {SortableEvent} from 'sortablejs';
-import {MoveEventExtended, SortableEventExtended, UseSortableOptions} from '@react-sortablejs/types';
+import Sortable, {SortableEvent} from 'sortablejs';
+import {ItemProps, MoveEventExtended, Options, RootProps, SortableEventExtended} from '@react-sortablejs/types';
 import {SortableContext} from '@react-sortablejs/SortableProvider';
 import {SmartArray} from '@react-sortablejs/utils';
 import {BiDirectionalMap} from 'bi-directional-map/dist';
 
 const DISABLED_ATTR = '__sortable-disabled'
 
-const createDraggableSelector = (selector?: string) => {
+const createDraggableSelector = (options: Options<any>) => {
+  if (options.handle) { // do nothing if 'handle' is provided
+    return
+  }
+
   const internalSelector = `:not([${DISABLED_ATTR}])`
-  if (!selector) {
+  if (!options.draggable) {
     return internalSelector
   }
-  return selector.split(',')
+  return options.draggable.split(',')
     .map(part => part.trim())
     .filter(part => part !== '')
     .map(part => part + internalSelector)
@@ -27,12 +31,11 @@ const shallowClone = (item: any) => {
   }
 }
 
-const useSortable = <T>({
-                          items,
-                          setItems,
-                          cloneItem = shallowClone,
-                          options = {}
-                        }: UseSortableOptions<T>) => {
+const useSortable = <T>(
+  items: T[],
+  setItems: (items: T[]) => void,
+  options: Options<T> = {},
+  cloneItem: (item: T) => T = shallowClone) => {
 
   const sortableCtx = useContext(SortableContext)
   if (!sortableCtx) {
@@ -47,10 +50,6 @@ const useSortable = <T>({
   const extendSortableEvent = (e: SortableEvent) => {
     const extended = e as SortableEventExtended<T>
     extended.stateItem = findItem(e.from, e.item)
-    if (e.pullMode === 'clone') {
-      console.log('cloning item...')
-      extended.stateItem = cloneItem(extended.stateItem)
-    }
     return extended
   }
 
@@ -84,9 +83,8 @@ const useSortable = <T>({
     }
 
     registerSortable(node, itemRefs.current)
-    SortableJS.create(node, {
+    const extendedOptions: Sortable.Options = {
       ...options,
-      draggable: createDraggableSelector(options.draggable),
       onStart: e => {
         const extended = extendSortableEvent(e)
         console.log('onStart', extended)
@@ -99,6 +97,10 @@ const useSortable = <T>({
       },
       onAdd: e => {
         const extended = extendSortableEvent(e)
+        if (extended.pullMode === 'clone') {
+          console.log('cloning item...')
+          extended.stateItem = cloneItem(extended.stateItem)
+        }
         console.log('onAdd', extended)
         options?.onAdd?.(extended)
         if (extended.pullMode === 'clone') {
@@ -164,16 +166,22 @@ const useSortable = <T>({
         console.log('onChange', e)
         options?.onChange?.(extendSortableEvent(e))
       }
-    })
+    }
+    const draggableSelector = createDraggableSelector(options);
+    if (draggableSelector) {
+      extendedOptions.draggable = draggableSelector
+    }
+
+    Sortable.create(node, extendedOptions)
   }, []) as RefCallback<HTMLElement>
 
   return {
     getRootProps: () => ({
       ref: refCallback
-    }),
+    } as RootProps),
     getItemProps: (item: T) => ({
       ref: getChildRefCallback(item)
-    })
+    } as ItemProps)
   }
 }
 
