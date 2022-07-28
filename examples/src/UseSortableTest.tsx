@@ -6,8 +6,7 @@ const UseSortableTest = () => {
     'Item 1',
     'Item 2',
     'Item 3',
-    'Item 4',
-    'Item 5'
+    'Item 4'
   ])
   const [items2, setItems2] = useState([
     'Item 5',
@@ -16,8 +15,21 @@ const UseSortableTest = () => {
     'Item 8'
   ])
 
-  const {getRootProps: getProps1} = useSortable({items, setItems, options: {animation: 150, group: 'hook'}})
-  const {getRootProps: getProps2} = useSortable({items: items2, setItems: setItems2, options: {animation: 150, group: 'hook'}})
+  const {getRootProps: getRootProps1, getItemProps: getItemProps1} = useSortable({
+    items, setItems, options: {
+      animation: 150,
+      group: 'hook',
+      draggable: ':not(.disabled)'
+    }
+  })
+  const {getRootProps: getRootProps2, getItemProps: getItemProps2} = useSortable({
+    items: items2,
+    setItems: setItems2,
+    options: {
+      animation: 150,
+      group: 'hook'
+    }
+  })
 
   console.log('items', items)
 
@@ -25,11 +37,13 @@ const UseSortableTest = () => {
     <div className="example-container">
       <h2>Simple list</h2>
       <div className="example">
-        <div {...getProps1()}>
-          {items.map(item => <div className="item" key={item}>{item}</div>)}
+        <div {...getRootProps1()}>
+          <div className="item">Broken 1</div>
+          {items.map(item => <div className="item" key={item} {...getItemProps1(item)}>{item}</div>)}
         </div>
-        <div {...getProps2()}>
-          {items2.map(item => <div className="item" key={item}>{item}</div>)}
+        <div {...getRootProps2()}>
+          {items2.map(item => <div className="item" key={item} {...getItemProps2(item)}>{item}</div>)}
+          <div className="item">Broken 2</div>
         </div>
       </div>
     </div>

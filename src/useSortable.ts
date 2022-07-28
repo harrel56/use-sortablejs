@@ -5,6 +5,21 @@ import {SortableContext} from '@react-sortablejs/SortableProvider';
 import {SmartArray} from '@react-sortablejs/utils';
 import {BiDirectionalMap} from 'bi-directional-map/dist';
 
+const DISABLED_CLASS = '__sortable-disabled'
+
+const createDraggableSelector = (selector?: string) => {
+  const internalSelector = `:not(.${DISABLED_CLASS})`
+  if (!selector) {
+    return internalSelector
+  }
+  return selector.split(',')
+    .map(part => part.trim())
+    .filter(part => part !== '')
+    .map(part => part + internalSelector)
+    .join(',')
+
+}
+
 const shallowClone = (item: any) => {
   if (typeof item === 'object') {
     return {...item}
@@ -34,10 +49,21 @@ const useSortable = <T>({
     const extended = e as SortableEventExtended<T>
     extended.stateItem = findItem(e.from, e.item)
     if (e.pullMode === 'clone') {
+      console.log('cloning item...')
       extended.stateItem = cloneItem(extended.stateItem)
     }
     return extended
   }
+
+  const getChildRefCallback = ((item) => {
+    return node => {
+      if (node) {
+        itemRefs.current.set(node, item)
+      } else {
+        itemRefs.current.deleteValue(item)
+      }
+    }
+  }) as (item: T) => RefCallback<HTMLElement>
 
   useEffect(() => {
     itemsDataRef.current = new SmartArray(items)
@@ -47,14 +73,13 @@ const useSortable = <T>({
     if (sortableRef.current === null) {
       return
     }
-    itemRefs.current.clear()
-    const children = sortableRef.current.children
-    for (let i = 0; i < children.length; i++) {
-      itemRefs.current.set(children[i] as HTMLElement, items[i])
+    for (const child of sortableRef.current.children) {
+      child.classList.toggle(DISABLED_CLASS, !itemRefs.current.hasKey(child as HTMLElement))
     }
   }, [sortableRef.current, items])
 
   const refCallback = useCallback((node) => {
+    console.log('sortable ref', node)
     sortableRef.current = node
     if (!node) {
       return
@@ -63,64 +88,79 @@ const useSortable = <T>({
     registerSortable(node, itemRefs.current)
     SortableJS.create(node, {
       ...options,
+      draggable: createDraggableSelector(options.draggable),
       onStart: e => {
-        console.log('onStart', e)
-        options?.onStart?.(extendSortableEvent(e))
+        const extended = extendSortableEvent(e)
+        console.log('onStart', extended)
+        options?.onStart?.(extended)
       },
       onEnd: e => {
-        console.log('onEnd', e)
-        options?.onEnd?.(extendSortableEvent(e))
+        const extended = extendSortableEvent(e)
+        console.log('onEnd', extended)
+        options?.onEnd?.(extended)
       },
       onAdd: e => {
-        console.log('onAdd', e)
-        const extended = extendSortableEvent(e);
+        const extended = extendSortableEvent(e)
+        console.log('onAdd', extended)
         options?.onAdd?.(extended)
-        if (e.pullMode === 'clone') {
-          e.clone.parentElement!.insertBefore(e.item, e.clone.nextSibling)
-          e.clone.remove()
+        if (extended.pullMode === 'clone') {
+          extended.clone.parentElement!.insertBefore(extended.item, extended.clone.nextSibling)
+          extended.clone.remove()
         } else {
-          e.item.remove()
+          extended.item.remove()
         }
-        setItems(itemsDataRef.current.add(extended.stateItem, e.newIndex!))
+        setItems(itemsDataRef.current.add(extended.stateItem, extended.newDraggableIndex!))
       },
       onClone: e => {
-        console.log('onClone', e)
-        options?.onClone?.(extendSortableEvent(e))
+        const extended = extendSortableEvent(e)
+        console.log('onClone', extended)
+        options?.onClone?.(extended)
       },
       onChoose: e => {
-        console.log('onChoose', e)
-        options?.onChoose?.(extendSortableEvent(e))
+        const extended = extendSortableEvent(e)
+        console.log('onChoose', extended)
+        options?.onChoose?.(extended)
       },
       onUnchoose: e => {
-        console.log('onUnchoose', e)
-        options?.onUnchoose?.(extendSortableEvent(e))
+        const extended = extendSortableEvent(e)
+        console.log('onUnchoose', extended)
+        options?.onUnchoose?.(extended)
       },
       onUpdate: e => {
-        console.log('onUpdate', e)
-        options?.onUpdate?.(extendSortableEvent(e))
-        setItems(itemsDataRef.current.moveItem(e.oldIndex!, e.newIndex!))
+        const extended = extendSortableEvent(e)
+        console.log('onUpdate', extended)
+        options?.onUpdate?.(extended)
+        setItems(itemsDataRef.current.moveItem(extended.oldDraggableIndex!, extended.newDraggableIndex!))
       },
       onSort: e => {
-        console.log('onSort', e)
-        options?.onSort?.(extendSortableEvent(e))
+        const extended = extendSortableEvent(e)
+        console.log('onSort', extended)
+        options?.onSort?.(extended)
       },
       onRemove: e => {
-        console.log('onRemove', e)
-        options?.onRemove?.(extendSortableEvent(e))
-        if (e.pullMode !== 'clone') {
-          node.insertBefore(e.item, null)
-          setItems(itemsDataRef.current.remove(e.oldIndex!))
+        const extended = extendSortableEvent(e)
+        console.log('onRemove', extended)
+        options?.onRemove?.(extended)
+        if (extended.pullMode !== 'clone') {
+          node.insertBefore(extended.item, null)
+          setItems(itemsDataRef.current.remove(extended.oldDraggableIndex!))
         }
       },
       onFilter: e => {
-        console.log('onFilter', e)
-        options?.onFilter?.(extendSortableEvent(e))
+        const extended = extendSortableEvent(e)
+        console.log('onFilter', extended)
+        options?.onFilter?.(extended)
       },
       onMove: (e, originalEvent) => {
         console.log('onMove', e)
         const extended = e as MoveEventExtended<T>
-        extended.stateItem = itemRefs.current.getValue(e.dragged)!
-        options?.onMove?.(extended, originalEvent)
+        const currentItem = itemRefs.current.getValue(e.dragged)
+        if (!currentItem) {
+          return false
+        }
+
+        extended.stateItem = currentItem
+        return options?.onMove?.(extended, originalEvent)
       },
       onChange: e => {
         console.log('onChange', e)
@@ -132,6 +172,9 @@ const useSortable = <T>({
   return {
     getRootProps: () => ({
       ref: refCallback
+    }),
+    getItemProps: (item: T) => ({
+      ref: getChildRefCallback(item)
     })
   }
 }
