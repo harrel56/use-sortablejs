@@ -5,10 +5,10 @@ import {SortableContext} from '@react-sortablejs/SortableProvider';
 import {SmartArray} from '@react-sortablejs/utils';
 import {BiDirectionalMap} from 'bi-directional-map/dist';
 
-const DISABLED_CLASS = '__sortable-disabled'
+const DISABLED_ATTR = '__sortable-disabled'
 
 const createDraggableSelector = (selector?: string) => {
-  const internalSelector = `:not(.${DISABLED_CLASS})`
+  const internalSelector = `:not([${DISABLED_ATTR}])`
   if (!selector) {
     return internalSelector
   }
@@ -17,7 +17,6 @@ const createDraggableSelector = (selector?: string) => {
     .filter(part => part !== '')
     .map(part => part + internalSelector)
     .join(',')
-
 }
 
 const shallowClone = (item: any) => {
@@ -74,12 +73,11 @@ const useSortable = <T>({
       return
     }
     for (const child of sortableRef.current.children) {
-      child.classList.toggle(DISABLED_CLASS, !itemRefs.current.hasKey(child as HTMLElement))
+      child.toggleAttribute(DISABLED_ATTR, !itemRefs.current.hasKey(child as HTMLElement))
     }
   }, [sortableRef.current, items])
 
   const refCallback = useCallback((node) => {
-    console.log('sortable ref', node)
     sortableRef.current = node
     if (!node) {
       return
