@@ -1,6 +1,7 @@
 :root {
   --secondary-color: #f4f5f6;
   --border-color: #e1e2e3;
+  --swap-color: #beeabf;
 }
 
 body {
@@ -95,5 +96,9 @@ code {
   border-color: var(--border-color);
   border-style: solid;
   user-select: none;
+}
+
+.swap {
+  background: var(--swap-color);
 }
 

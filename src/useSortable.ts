@@ -92,11 +92,24 @@ const useSortable = <T>(
       setItems(itemsDataRef.current.add(extended.stateItem, extended.newDraggableIndex!))
     }
 
+    let swapping = false
     extendedOpts.onUpdate = e => {
       const extended = extendSortableEvent(e)
       console.log('onUpdate', extended)
       options?.onUpdate?.(extended)
-      setItems(itemsDataRef.current.moveItem(extended.oldDraggableIndex!, extended.newDraggableIndex!))
+      if (extended.swapItem) {
+        if (extendedOpts.animation) {
+          swapping = true
+          setTimeout(() => {
+            setItems(itemsDataRef.current.swap(extended.oldDraggableIndex!, extended.newDraggableIndex!))
+            swapping = false
+          }, options.animation)
+        } else {
+          setItems(itemsDataRef.current.swap(extended.oldDraggableIndex!, extended.newDraggableIndex!))
+        }
+      } else {
+        setItems(itemsDataRef.current.moveItem(extended.oldDraggableIndex!, extended.newDraggableIndex!))
+      }
     }
 
     extendedOpts.onRemove = e => {
@@ -113,7 +126,7 @@ const useSortable = <T>(
       console.log('onMove', e)
       const extended = e as MoveEventExtended<T>
       const currentItem = itemRefs.current.getValue(e.dragged)
-      if (!currentItem) {
+      if (!currentItem || swapping) {
         return false
       }
 

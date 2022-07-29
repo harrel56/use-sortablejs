@@ -8,6 +8,8 @@ import DisabledList from '@examples/DisabledList';
 import HandleList from '@examples/HandleList';
 import FilterList from '@examples/FilterList';
 import SortableProvider from '@react-sortablejs/SortableProvider';
+import SwapList from '@examples/SwapList';
+import Sortable, {Swap} from 'sortablejs';
 
 function App() {
   return (
@@ -21,12 +23,14 @@ function App() {
         <FilterList/>
         <GridList/>
         <NestedList/>
+        <SwapList/>
       </div>
     </SortableProvider>
   );
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
+Sortable.mount(new Swap())
 
 root.render(
   <App/>

@@ -10,6 +10,13 @@ export class SmartArray<T> {
     return [...this.#arr]
   }
 
+  swap(idx1: number, idx2: number) {
+    const tmp = this.#arr[idx1]
+    this.#arr[idx1] = this.#arr[idx2]
+    this.#arr[idx2] = tmp
+    return [...this.#arr]
+  }
+
   moveItem(from: number, to: number) {
     const item = this.#arr[from]
     this.#arr.splice(from, 1)
