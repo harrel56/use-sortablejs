@@ -1,5 +1,5 @@
 import {RefCallback, useCallback, useContext, useEffect, useRef} from 'react';
-import Sortable, {SortableEvent} from 'sortablejs';
+import Sortable, {SortableEvent, SortableOptions} from 'sortablejs';
 import {ItemProps, MoveEventExtended, Options, RootProps, SortableEventExtended} from '@react-sortablejs/types';
 import {SortableContext} from '@react-sortablejs/SortableProvider';
 import {SmartArray} from '@react-sortablejs/utils';
@@ -63,6 +63,71 @@ const useSortable = <T>(
     }
   }) as (item: T) => RefCallback<HTMLElement>
 
+  const extendOptions = (node: HTMLElement, opts: SortableOptions) => {
+    const extendedOpts = {...opts}
+    const simpleEvents: (keyof SortableOptions)[] = ['onStart', 'onEnd', 'onClone', 'onChoose', 'onUnchoose', 'onSort', 'onFilter', 'onChange']
+    for (let event of simpleEvents) {
+      // @ts-ignore
+      extendedOpts[event] = (e: SortableEvent) => {
+        const extended = extendSortableEvent(e)
+        console.log(event, extended)
+        // @ts-ignore
+        opts?.[event]?.(extended)
+      }
+    }
+
+    extendedOpts.onAdd = e => {
+      const extended = extendSortableEvent(e)
+      if (extended.pullMode === 'clone') {
+        extended.stateItem = cloneItem(extended.stateItem)
+      }
+      console.log('onAdd', extended)
+      options?.onAdd?.(extended)
+      if (extended.pullMode === 'clone') {
+        extended.clone.parentElement!.insertBefore(extended.item, extended.clone.nextSibling)
+        extended.clone.remove()
+      } else {
+        extended.item.remove()
+      }
+      setItems(itemsDataRef.current.add(extended.stateItem, extended.newDraggableIndex!))
+    }
+
+    extendedOpts.onUpdate = e => {
+      const extended = extendSortableEvent(e)
+      console.log('onUpdate', extended)
+      options?.onUpdate?.(extended)
+      setItems(itemsDataRef.current.moveItem(extended.oldDraggableIndex!, extended.newDraggableIndex!))
+    }
+
+    extendedOpts.onRemove = e => {
+      const extended = extendSortableEvent(e)
+      console.log('onRemove', extended)
+      options?.onRemove?.(extended)
+      if (extended.pullMode !== 'clone') {
+        node.insertBefore(extended.item, null)
+        setItems(itemsDataRef.current.remove(extended.oldDraggableIndex!))
+      }
+    }
+
+    extendedOpts.onMove = (e, originalEvent) => {
+      console.log('onMove', e)
+      const extended = e as MoveEventExtended<T>
+      const currentItem = itemRefs.current.getValue(e.dragged)
+      if (!currentItem) {
+        return false
+      }
+
+      extended.stateItem = currentItem
+      return options?.onMove?.(extended, originalEvent)
+    }
+
+    const draggableSelector = createDraggableSelector(options);
+    if (draggableSelector) {
+      extendedOpts.draggable = draggableSelector
+    }
+    return extendedOpts
+  }
+
   useEffect(() => {
     itemsDataRef.current = new SmartArray(items)
   }, [items])
@@ -81,98 +146,8 @@ const useSortable = <T>(
     if (!node) {
       return
     }
-
     registerSortable(node, itemRefs.current)
-    const extendedOptions: Sortable.Options = {
-      ...options,
-      onStart: e => {
-        const extended = extendSortableEvent(e)
-        console.log('onStart', extended)
-        options?.onStart?.(extended)
-      },
-      onEnd: e => {
-        const extended = extendSortableEvent(e)
-        console.log('onEnd', extended)
-        options?.onEnd?.(extended)
-      },
-      onAdd: e => {
-        const extended = extendSortableEvent(e)
-        if (extended.pullMode === 'clone') {
-          console.log('cloning item...')
-          extended.stateItem = cloneItem(extended.stateItem)
-        }
-        console.log('onAdd', extended)
-        options?.onAdd?.(extended)
-        if (extended.pullMode === 'clone') {
-          extended.clone.parentElement!.insertBefore(extended.item, extended.clone.nextSibling)
-          extended.clone.remove()
-        } else {
-          extended.item.remove()
-        }
-        setItems(itemsDataRef.current.add(extended.stateItem, extended.newDraggableIndex!))
-      },
-      onClone: e => {
-        const extended = extendSortableEvent(e)
-        console.log('onClone', extended)
-        options?.onClone?.(extended)
-      },
-      onChoose: e => {
-        const extended = extendSortableEvent(e)
-        console.log('onChoose', extended)
-        options?.onChoose?.(extended)
-      },
-      onUnchoose: e => {
-        const extended = extendSortableEvent(e)
-        console.log('onUnchoose', extended)
-        options?.onUnchoose?.(extended)
-      },
-      onUpdate: e => {
-        const extended = extendSortableEvent(e)
-        console.log('onUpdate', extended)
-        options?.onUpdate?.(extended)
-        setItems(itemsDataRef.current.moveItem(extended.oldDraggableIndex!, extended.newDraggableIndex!))
-      },
-      onSort: e => {
-        const extended = extendSortableEvent(e)
-        console.log('onSort', extended)
-        options?.onSort?.(extended)
-      },
-      onRemove: e => {
-        const extended = extendSortableEvent(e)
-        console.log('onRemove', extended)
-        options?.onRemove?.(extended)
-        if (extended.pullMode !== 'clone') {
-          node.insertBefore(extended.item, null)
-          setItems(itemsDataRef.current.remove(extended.oldDraggableIndex!))
-        }
-      },
-      onFilter: e => {
-        const extended = extendSortableEvent(e)
-        console.log('onFilter', extended)
-        options?.onFilter?.(extended)
-      },
-      onMove: (e, originalEvent) => {
-        console.log('onMove', e)
-        const extended = e as MoveEventExtended<T>
-        const currentItem = itemRefs.current.getValue(e.dragged)
-        if (!currentItem) {
-          return false
-        }
-
-        extended.stateItem = currentItem
-        return options?.onMove?.(extended, originalEvent)
-      },
-      onChange: e => {
-        console.log('onChange', e)
-        options?.onChange?.(extendSortableEvent(e))
-      }
-    }
-    const draggableSelector = createDraggableSelector(options);
-    if (draggableSelector) {
-      extendedOptions.draggable = draggableSelector
-    }
-
-    Sortable.create(node, extendedOptions)
+    Sortable.create(node, extendOptions(node, options as SortableOptions))
   }, []) as RefCallback<HTMLElement>
 
   return {
