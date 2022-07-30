@@ -29,7 +29,7 @@ const List = ({itemsState}: ListProps) => {
     setItems(newItems)
     return newItems
   }) as Dispatch<SetStateAction<Item[]>>
-  const {getRootProps, getItemProps} = useSortable(items, setItemsInternal, {
+  const {getRootProps, getItemProps} = useSortable(setItemsInternal, {
     animation: 150,
     group: 'shared'
   })
@@ -72,7 +72,7 @@ const NestedList = () => {
     },
     {title: 'Item 5', children: []}
   ])
-  const {getRootProps, getItemProps} = useSortable(items, setItems, {
+  const {getRootProps, getItemProps} = useSortable(setItems, {
     animation: 150,
     group: 'shared'
   })

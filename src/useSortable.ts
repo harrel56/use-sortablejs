@@ -1,27 +1,16 @@
-import {Dispatch, RefCallback, SetStateAction, useCallback, useContext, useEffect, useRef} from 'react';
+import {Dispatch, RefCallback, SetStateAction, useCallback, useContext, useRef} from 'react';
 import Sortable, {SortableEvent, SortableOptions} from 'sortablejs';
-import {ItemProps, MoveEventExtended, Options, RootProps, SortableEventExtended} from '@react-sortablejs/types';
+import {
+  ItemProps,
+  MoveEventExtended,
+  MultiDragUtils,
+  Options,
+  RootProps,
+  SortableEventExtended
+} from '@react-sortablejs/types';
 import {SortableContext} from '@react-sortablejs/SortableProvider';
 import {BiDirectionalMap} from 'bi-directional-map/dist';
-import {insert, moveItem, remove, swap} from '@react-sortablejs/utils';
-
-const DISABLED_ATTR = '__sortable-disabled'
-
-const createDraggableSelector = (options: Options<any>) => {
-  if (options.handle) { // do nothing if 'handle' is provided
-    return
-  }
-
-  const internalSelector = `:not([${DISABLED_ATTR}])`
-  if (!options.draggable) {
-    return internalSelector
-  }
-  return options.draggable.split(',')
-    .map(part => part.trim())
-    .filter(part => part !== '')
-    .map(part => part + internalSelector)
-    .join(',')
-}
+import {insert, moveItem, moveItems, remove, removeAll, swap} from '@react-sortablejs/utils';
 
 const shallowClone = (item: any) => {
   if (typeof item === 'object') {
@@ -31,8 +20,11 @@ const shallowClone = (item: any) => {
   }
 }
 
+const isClone = (e: SortableEvent): boolean => e.pullMode === 'clone'
+const isSwap = (e: SortableEvent): boolean => !!e.swapItem
+const isMultiDrag = (e: SortableEvent): boolean => e.newIndicies.length > 0
+
 const useSortable = <T>(
-  items: T[],
   setItems: Dispatch<SetStateAction<T[]>>,
   options: Options<T> = {},
   cloneItem: (item: T) => T = shallowClone) => {
@@ -49,6 +41,7 @@ const useSortable = <T>(
   const extendSortableEvent = (e: SortableEvent) => {
     const extended = e as SortableEventExtended<T>
     extended.stateItem = findItem(e.from, e.item)
+    extended.stateItems = e.newIndicies.map(el => findItem(e.from, el.multiDragElement))
     return extended
   }
 
@@ -64,7 +57,7 @@ const useSortable = <T>(
 
   const extendOptions = (node: HTMLElement, opts: SortableOptions) => {
     const extendedOpts = {...opts}
-    const simpleEvents: (keyof SortableOptions)[] = ['onStart', 'onEnd', 'onClone', 'onChoose', 'onUnchoose', 'onSort', 'onFilter', 'onChange']
+    const simpleEvents: (keyof SortableOptions)[] = ['onStart', 'onClone', 'onChoose', 'onUnchoose', 'onSort', 'onFilter', 'onChange']
     for (let event of simpleEvents) {
       // @ts-ignore
       extendedOpts[event] = (e: SortableEvent) => {
@@ -77,26 +70,31 @@ const useSortable = <T>(
 
     extendedOpts.onAdd = e => {
       const extended = extendSortableEvent(e)
-      if (extended.pullMode === 'clone') {
+      if (isClone(extended)) {
         extended.stateItem = cloneItem(extended.stateItem)
       }
       console.log('onAdd', extended)
       options?.onAdd?.(extended)
-      if (extended.pullMode === 'clone') {
+      if (isClone(extended)) {
         extended.clone.parentElement!.insertBefore(extended.item, extended.clone.nextSibling)
         extended.clone.remove()
+        setItems(state => insert(state, extended.newDraggableIndex!, extended.stateItem))
+      } else if (isMultiDrag(extended)) {
+        extended.newIndicies.forEach(el => el.multiDragElement.remove())
+        setItems(state => insert(state, extended.newDraggableIndex!, ...extended.stateItems))
       } else {
         extended.item.remove()
+        setItems(state => insert(state, extended.newDraggableIndex!, extended.stateItem))
       }
-      setItems(state => insert(state, extended.stateItem, extended.newDraggableIndex!))
     }
 
+    let multiDragUpdate: (() => void) | null = null
     let swapping = false
     extendedOpts.onUpdate = e => {
       const extended = extendSortableEvent(e)
       console.log('onUpdate', extended)
       options?.onUpdate?.(extended)
-      if (extended.swapItem) {
+      if (isSwap(extended)) {
         if (extendedOpts.animation) {
           swapping = true
           setTimeout(() => {
@@ -106,6 +104,8 @@ const useSortable = <T>(
         } else {
           setItems(state => swap(state, extended.oldDraggableIndex!, extended.newDraggableIndex!))
         }
+      } else if (isMultiDrag(extended)) {
+        multiDragUpdate = () => setItems(state => moveItems(state, extended.oldIndicies.map(i => i.index), extended.newIndicies[0].index))
       } else {
         setItems(state => moveItem(state, extended.oldDraggableIndex!, extended.newDraggableIndex!))
       }
@@ -115,7 +115,12 @@ const useSortable = <T>(
       const extended = extendSortableEvent(e)
       console.log('onRemove', extended)
       options?.onRemove?.(extended)
-      if (extended.pullMode !== 'clone') {
+      if (isMultiDrag(extended)) {
+        multiDragUpdate = null
+        extended.oldIndicies.forEach(el => node.insertBefore(el.multiDragElement, null))
+        extended.oldIndicies.forEach(el => (Sortable.utils as MultiDragUtils).deselect(el.multiDragElement))
+        setItems(state => removeAll(state, extended.oldIndicies.map(el => el.index)))
+      } else if (!isClone(extended)) {
         node.insertBefore(extended.item, null)
         setItems(state => remove(state, extended.oldDraggableIndex!))
       }
@@ -133,21 +138,17 @@ const useSortable = <T>(
       return options?.onMove?.(extended, originalEvent)
     }
 
-    const draggableSelector = createDraggableSelector(options);
-    if (draggableSelector) {
-      extendedOpts.draggable = draggableSelector
+    extendedOpts.onEnd = e => {
+      const extended = extendSortableEvent(e)
+      console.log('onEnd', extended)
+      opts?.onEnd?.(extended)
+      if (multiDragUpdate) {
+        multiDragUpdate()
+      }
     }
+
     return extendedOpts
   }
-
-  useEffect(() => {
-    if (sortableRef.current === null) {
-      return
-    }
-    for (const child of sortableRef.current.children) {
-      child.toggleAttribute(DISABLED_ATTR, !itemRefs.current.hasKey(child as HTMLElement))
-    }
-  }, [sortableRef.current, items])
 
   const refCallback = useCallback((node) => {
     sortableRef.current = node

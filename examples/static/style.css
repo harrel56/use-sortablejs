@@ -1,6 +1,7 @@
 :root {
   --secondary-color: #f4f5f6;
   --border-color: #e1e2e3;
+  --multi-drag-color: #eabebe;
   --swap-color: #beeabf;
 }
 
@@ -96,6 +97,10 @@ code {
   border-color: var(--border-color);
   border-style: solid;
   user-select: none;
+}
+
+.multi-drag {
+  background: var(--multi-drag-color);
 }
 
 .swap {

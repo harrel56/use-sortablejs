@@ -24,7 +24,7 @@ const GridList = () => {
     'Item 19',
     'Item 20'
   ])
-  const {getRootProps, getItemProps} = useSortable(items, setItems, {animation: 150})
+  const {getRootProps, getItemProps} = useSortable(setItems, {animation: 150})
 
   return (
     <div className="example-container">

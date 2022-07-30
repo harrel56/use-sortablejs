@@ -9,7 +9,7 @@ const SimpleList = () => {
     'Item 4',
     'Item 5'
   ])
-  const {getRootProps, getItemProps} = useSortable(items, setItems, {animation: 150})
+  const {getRootProps, getItemProps} = useSortable(setItems, {animation: 150})
   return (
     <div className="example-container">
       <h2>Simple list</h2>

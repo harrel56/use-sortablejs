@@ -9,6 +9,10 @@ export interface ItemProps {
   ref: RefCallback<HTMLElement>
 }
 
+export interface MultiDragUtils extends Sortable.Utils {
+  deselect: (e: HTMLElement) => void
+}
+
 export interface Options<T> extends Sortable.Options {
   /**
    * Element dragging started
@@ -62,8 +66,10 @@ export interface Options<T> extends Sortable.Options {
 
 export interface SortableEventExtended<T> extends SortableEvent {
   stateItem: T
+  stateItems: T[] // only if multidrag, otherwise empty
 }
 
 export interface MoveEventExtended<T> extends MoveEvent {
   stateItem: T
+  stateItems: T[] // only if multidrag, otherwise empty
 }

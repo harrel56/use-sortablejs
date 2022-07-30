@@ -9,7 +9,7 @@ const SwapList = () => {
     'Item 4',
     'Item 5'
   ])
-  const {getRootProps, getItemProps} = useSortable(items, setItems, {
+  const {getRootProps, getItemProps} = useSortable(setItems, {
     animation: 150,
     swap: true,
     swapClass: 'swap'

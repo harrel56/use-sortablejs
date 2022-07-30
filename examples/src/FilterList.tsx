@@ -11,7 +11,7 @@ const FilterList = () => {
     {name: 'Item 5'},
     {name: 'Item 6'}
   ])
-  const {getRootProps, getItemProps} = useSortable(items, setItems, {
+  const {getRootProps, getItemProps} = useSortable(setItems, {
     animation: 150,
     filter: '.filtered'
   })

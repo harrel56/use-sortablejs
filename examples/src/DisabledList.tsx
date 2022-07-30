@@ -18,7 +18,7 @@ const DisabledList = () => {
   ])
   const cloneItem = (item: typeof items[0]) => ({...item, id: ++idx.current})
 
-  const {getRootProps, getItemProps} = useSortable(items, setItems, {
+  const {getRootProps, getItemProps} = useSortable(setItems, {
     animation: 150,
     sort: false,
     group: {
@@ -27,7 +27,7 @@ const DisabledList = () => {
       put: false
     },
   }, cloneItem)
-  const {getRootProps: getRootProps2, getItemProps: getItemProps2} = useSortable(items2, setItems2, {
+  const {getRootProps: getRootProps2, getItemProps: getItemProps2} = useSortable(setItems2, {
     animation: 150,
     group: 'disabled'
   }, cloneItem)

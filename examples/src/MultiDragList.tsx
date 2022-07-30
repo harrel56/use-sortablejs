@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import useSortable from '@react-sortablejs/useSortable';
 
-const SharedList = () => {
+const MultiDragList = () => {
   const [items, setItems] = useState([
     'Item 1',
     'Item 2',
@@ -14,19 +14,23 @@ const SharedList = () => {
     'Item 7',
     'Item 8'
   ])
-
   const {getRootProps, getItemProps} = useSortable(setItems, {
     animation: 150,
-    group: 'shared'
+    group: 'multidrag',
+    multiDrag: true,
+    selectedClass: 'multi-drag',
+    fallbackTolerance: 3
   })
   const {getRootProps: getRootProps2, getItemProps: getItemProps2} = useSortable(setItems2, {
     animation: 150,
-    group: 'shared'
+    group: 'multidrag',
+    multiDrag: true,
+    selectedClass: 'multi-drag',
+    fallbackTolerance: 3
   })
-
   return (
     <div className="example-container">
-      <h2>Shared lists</h2>
+      <h2>Multi drag list</h2>
       <div className="example">
         <div {...getRootProps()}>
           {items.map(item => <div className="item" key={item} {...getItemProps(item)}>{item}</div>)}
@@ -36,7 +40,7 @@ const SharedList = () => {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default SharedList;
+export default MultiDragList

@@ -9,7 +9,8 @@ import HandleList from '@examples/HandleList';
 import FilterList from '@examples/FilterList';
 import SortableProvider from '@react-sortablejs/SortableProvider';
 import SwapList from '@examples/SwapList';
-import Sortable, {Swap} from 'sortablejs';
+import Sortable, {MultiDrag, Swap} from 'sortablejs';
+import MultiDragList from '@examples/MultiDragList';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <GridList/>
         <NestedList/>
         <SwapList/>
+        <MultiDragList/>
       </div>
     </SortableProvider>
   );
@@ -31,6 +33,7 @@ function App() {
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 Sortable.mount(new Swap())
+Sortable.mount(new MultiDrag())
 
 root.render(
   <App/>
