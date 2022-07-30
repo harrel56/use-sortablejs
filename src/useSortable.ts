@@ -1,9 +1,9 @@
-import {RefCallback, useCallback, useContext, useEffect, useRef} from 'react';
+import {Dispatch, RefCallback, SetStateAction, useCallback, useContext, useEffect, useRef} from 'react';
 import Sortable, {SortableEvent, SortableOptions} from 'sortablejs';
 import {ItemProps, MoveEventExtended, Options, RootProps, SortableEventExtended} from '@react-sortablejs/types';
 import {SortableContext} from '@react-sortablejs/SortableProvider';
-import {SmartArray} from '@react-sortablejs/utils';
 import {BiDirectionalMap} from 'bi-directional-map/dist';
+import {insert, moveItem, remove, swap} from '@react-sortablejs/utils';
 
 const DISABLED_ATTR = '__sortable-disabled'
 
@@ -33,7 +33,7 @@ const shallowClone = (item: any) => {
 
 const useSortable = <T>(
   items: T[],
-  setItems: (items: T[]) => void,
+  setItems: Dispatch<SetStateAction<T[]>>,
   options: Options<T> = {},
   cloneItem: (item: T) => T = shallowClone) => {
 
@@ -44,7 +44,6 @@ const useSortable = <T>(
   const {registerSortable, findItem} = sortableCtx
 
   const sortableRef = useRef<HTMLElement | null>(null)
-  const itemsDataRef = useRef(new SmartArray(items))
   const itemRefs = useRef(new BiDirectionalMap<HTMLElement, T>)
 
   const extendSortableEvent = (e: SortableEvent) => {
@@ -89,7 +88,7 @@ const useSortable = <T>(
       } else {
         extended.item.remove()
       }
-      setItems(itemsDataRef.current.add(extended.stateItem, extended.newDraggableIndex!))
+      setItems(state => insert(state, extended.stateItem, extended.newDraggableIndex!))
     }
 
     let swapping = false
@@ -101,14 +100,14 @@ const useSortable = <T>(
         if (extendedOpts.animation) {
           swapping = true
           setTimeout(() => {
-            setItems(itemsDataRef.current.swap(extended.oldDraggableIndex!, extended.newDraggableIndex!))
+            setItems(state => swap(state, extended.oldDraggableIndex!, extended.newDraggableIndex!))
             swapping = false
           }, options.animation)
         } else {
-          setItems(itemsDataRef.current.swap(extended.oldDraggableIndex!, extended.newDraggableIndex!))
+          setItems(state => swap(state, extended.oldDraggableIndex!, extended.newDraggableIndex!))
         }
       } else {
-        setItems(itemsDataRef.current.moveItem(extended.oldDraggableIndex!, extended.newDraggableIndex!))
+        setItems(state => moveItem(state, extended.oldDraggableIndex!, extended.newDraggableIndex!))
       }
     }
 
@@ -118,7 +117,7 @@ const useSortable = <T>(
       options?.onRemove?.(extended)
       if (extended.pullMode !== 'clone') {
         node.insertBefore(extended.item, null)
-        setItems(itemsDataRef.current.remove(extended.oldDraggableIndex!))
+        setItems(state => remove(state, extended.oldDraggableIndex!))
       }
     }
 
@@ -140,10 +139,6 @@ const useSortable = <T>(
     }
     return extendedOpts
   }
-
-  useEffect(() => {
-    itemsDataRef.current = new SmartArray(items)
-  }, [items])
 
   useEffect(() => {
     if (sortableRef.current === null) {

@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {Dispatch, SetStateAction, useState} from 'react';
 import useSortable from '@react-sortablejs/useSortable';
 import {ItemProps} from '@react-sortablejs/types';
 
@@ -22,11 +22,13 @@ const itemToView = <T extends Item, >(item: T, getItemProps: (item: T) => ItemPr
 
 const List = ({itemsState}: ListProps) => {
   const [items, setItems] = useState(itemsState)
-  const setItemsInternal = (newItems: Item[]) => {
+  const setItemsInternal = ((setFun: (prev: Item[]) => Item[]) => {
+    const newItems = setFun(items)
     itemsState.splice(0, items.length)
     itemsState.push(...newItems)
     setItems(newItems)
-  }
+    return newItems
+  }) as Dispatch<SetStateAction<Item[]>>
   const {getRootProps, getItemProps} = useSortable(items, setItemsInternal, {
     animation: 150,
     group: 'shared'

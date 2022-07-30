@@ -1,36 +1,28 @@
 
-export class SmartArray<T> {
-  readonly #arr: T[]
+export const swap = <T>(arr: T[], idx1: number, idx2: number) => {
+  const copy = [...arr]
+  const tmp = copy[idx1]
+  copy[idx1] = copy[idx2]
+  copy[idx2] = tmp
+  return copy
+}
 
-  constructor(arr: T[]) {
-    this.#arr = [...arr];
-  }
+export const moveItem = <T>(arr: T[], from: number, to: number) => {
+  const copy = [...arr]
+  const item = copy[from]
+  copy.splice(from, 1)
+  copy.splice(to, 0, item)
+  return copy
+}
 
-  get() {
-    return [...this.#arr]
-  }
+export const insert = <T>(arr: T[], item: T, idx: number) => {
+  const copy = [...arr]
+  copy.splice(idx, 0, item)
+  return copy
+}
 
-  swap(idx1: number, idx2: number) {
-    const tmp = this.#arr[idx1]
-    this.#arr[idx1] = this.#arr[idx2]
-    this.#arr[idx2] = tmp
-    return [...this.#arr]
-  }
-
-  moveItem(from: number, to: number) {
-    const item = this.#arr[from]
-    this.#arr.splice(from, 1)
-    this.#arr.splice(to, 0, item)
-    return [...this.#arr]
-  }
-
-  add(item: T, idx: number) {
-    this.#arr.splice(idx, 0, item)
-    return [...this.#arr]
-  }
-
-  remove(idx: number) {
-    this.#arr.splice(idx, 1)
-    return [...this.#arr]
-  }
+export const remove = <T>(arr: T[], idx: number) => {
+  const copy = [...arr]
+  copy.splice(idx, 1)
+  return copy
 }
