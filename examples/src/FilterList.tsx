@@ -11,7 +11,10 @@ const FilterList = () => {
     {name: 'Item 5'},
     {name: 'Item 6'}
   ])
-  const {getRootProps, getItemProps} = useSortable(items, setItems, {animation: 150})
+  const {getRootProps, getItemProps} = useSortable(items, setItems, {
+    animation: 150,
+    filter: '.filtered'
+  })
   return (
     <div className="example-container">
       <h2>Filter</h2>
