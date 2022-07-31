@@ -32,10 +32,10 @@ const MultiDragList = () => {
     <div className="example-container">
       <h2>Multi drag list</h2>
       <div className="example">
-        <div {...getRootProps()}>
+        <div id='multi-drag-list1' {...getRootProps()}>
           {items.map(item => <div className="item" key={item} {...getItemProps(item)}>{item}</div>)}
         </div>
-        <div {...getRootProps2()}>
+        <div id='multi-drag-list2' {...getRootProps2()}>
           {items2.map(item => <div className="item" key={item} {...getItemProps2(item)}>{item}</div>)}
         </div>
       </div>

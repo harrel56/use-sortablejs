@@ -17,7 +17,7 @@ const HandleList = () => {
   return (
     <div className="example-container">
       <h2>Handle</h2>
-      <div {...getRootProps()}>
+      <div id='handle-list' {...getRootProps()}>
         {items.map(item =>
           <div className="item" key={item} {...getItemProps(item)}>
             <span className="handle"/>{item}

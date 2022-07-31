@@ -18,7 +18,7 @@ const FilterList = () => {
   return (
     <div className="example-container">
       <h2>Filter</h2>
-      <div {...getRootProps()}>
+      <div id='filter-list' {...getRootProps()}>
         {items.map(item =>
           <div className={item.filtered ? 'item filtered' : 'item'} key={item.name} {...getItemProps(item)}>
             {item.name}

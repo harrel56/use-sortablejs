@@ -24,6 +24,10 @@ code {
   gap: 3em;
 }
 
+.footer {
+  text-align: center;
+}
+
 .example-container {
   display: flex;
   flex-direction: column;

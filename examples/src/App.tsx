@@ -15,7 +15,7 @@ import MultiDragList from '@examples/MultiDragList';
 function App() {
   return (
     <SortableProvider>
-      <div className="container">
+      <main className="container">
         <SimpleList/>
         <SharedList/>
         <CloningList/>
@@ -26,7 +26,10 @@ function App() {
         <NestedList/>
         <SwapList/>
         <MultiDragList/>
-      </div>
+        <footer className='footer'>
+          <p>Source code on: <a href='https://gitlab.com/org.harrel/use-sortablejs'>GitLab</a></p>
+        </footer>
+      </main>
     </SortableProvider>
   );
 }

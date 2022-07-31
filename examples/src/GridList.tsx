@@ -29,7 +29,7 @@ const GridList = () => {
   return (
     <div className="example-container">
       <h2>Grid</h2>
-      <div className='grid' {...getRootProps()}>
+      <div id='grid-list' className='grid' {...getRootProps()}>
         {items.map(item => <div className="grid-item" key={item} {...getItemProps(item)}>{item}</div>)}
       </div>
     </div>
