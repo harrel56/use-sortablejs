@@ -2,6 +2,8 @@
 export const shallowClone = (item: any) => {
   if (typeof item === 'object') {
     return {...item}
+  } else if(Array.isArray(item)) {
+    return [...item]
   } else {
     return item
   }
