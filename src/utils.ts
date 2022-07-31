@@ -45,3 +45,9 @@ export const remove = <T>(arr: T[], idx: number) => {
 export const removeAll = <T>(arr: T[], toRemove: number[]) => {
   return arr.filter((_, idx) => !toRemove.includes(idx))
 }
+
+export const replace = <T>(arr: T[], idx: number, item: T) => {
+  const copy = [...arr]
+  copy[idx] = item
+  return copy
+}

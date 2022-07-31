@@ -10,7 +10,7 @@ import {
 } from '@react-sortablejs/types';
 import {SortableContext} from '@react-sortablejs/SortableProvider';
 import {BiDirectionalMap} from 'bi-directional-map/dist';
-import {insert, moveItem, moveItems, remove, removeAll, shallowClone, swap} from '@react-sortablejs/utils';
+import {insert, moveItem, moveItems, remove, removeAll, replace, shallowClone, swap} from '@react-sortablejs/utils';
 
 const isClone = (e: SortableEvent): boolean => e.pullMode === 'clone'
 const isSwap = (e: SortableEvent): boolean => !!e.swapItem
@@ -34,6 +34,9 @@ const useSortable = <T>(
     const extended = e as SortableEventExtended<T>
     extended.stateItem = findItem(e.from, e.item)
     extended.stateItems = e.newIndicies.map(el => findItem(e.from, el.multiDragElement))
+    if (isSwap(e)) {
+      extended.swapStateItem = findItem(e.to, e.swapItem!)
+    }
     return extended
   }
 
@@ -71,6 +74,14 @@ const useSortable = <T>(
         extended.clone.parentElement!.insertBefore(extended.item, extended.clone.nextSibling)
         extended.clone.remove()
         setItems(state => insert(state, extended.newDraggableIndex!, extended.stateItem))
+      } else if (isSwap(extended)) {
+        const delay = extendedOpts.animation ? Math.max(extendedOpts.animation, 0) : 0
+        swapping = true
+        setTimeout(() => {
+          node.insertBefore(extended.swapItem!, null)
+          setItems(state => replace(state, extended.newDraggableIndex!, extended.stateItem))
+          swapping = false
+        }, delay)
       } else if (isMultiDrag(extended)) {
         extended.newIndicies.forEach(el => el.multiDragElement.remove())
         setItems(state => insert(state, extended.newDraggableIndex!, ...extended.stateItems))
@@ -87,18 +98,13 @@ const useSortable = <T>(
       console.log('onUpdate', extended)
       options?.onUpdate?.(extended)
       if (isSwap(extended)) {
-        if (extendedOpts.animation) {
-          swapping = true
-          setTimeout(() => {
-            setItems(state => swap(state, extended.oldDraggableIndex!, extended.newDraggableIndex!))
-            swapping = false
-          }, options.animation)
-        } else {
+        const delay = extendedOpts.animation ? Math.max(extendedOpts.animation, 0) : 0
+        swapping = true
+        setTimeout(() => {
           setItems(state => swap(state, extended.oldDraggableIndex!, extended.newDraggableIndex!))
-        }
+          swapping = false
+        }, delay)
       } else if (isMultiDrag(extended)) {
-        console.log('newIdxs', ...extended.newIndicies)
-
         multiDragUpdate = () => setItems(state => moveItems(state, extended.oldIndicies.map(i => i.index), extended.newIndicies[0].index))
       } else {
         setItems(state => moveItem(state, extended.oldDraggableIndex!, extended.newDraggableIndex!))
@@ -109,7 +115,15 @@ const useSortable = <T>(
       const extended = extendSortableEvent(e)
       console.log('onRemove', extended)
       options?.onRemove?.(extended)
-      if (isMultiDrag(extended)) {
+      if (isSwap(extended)) {
+        const delay = extendedOpts.animation ? Math.max(extendedOpts.animation, 0) : 0
+        swapping = true
+        setTimeout(() => {
+          node.insertBefore(extended.item, null)
+          setItems(state => replace(state, extended.oldDraggableIndex!, extended.swapStateItem))
+          swapping = false
+        }, delay)
+      } else if (isMultiDrag(extended)) {
         multiDragUpdate = null
         extended.oldIndicies.forEach(el => node.insertBefore(el.multiDragElement, null))
         extended.oldIndicies.forEach(el => (Sortable.utils as MultiDragUtils).deselect(el.multiDragElement))

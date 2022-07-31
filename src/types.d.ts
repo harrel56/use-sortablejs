@@ -66,6 +66,7 @@ export interface Options<T> extends Sortable.Options {
 
 export interface SortableEventExtended<T> extends SortableEvent {
   stateItem: T
+  swapStateItem: T // only if swap, otherwise undefined
   stateItems: T[] // only if multidrag, otherwise empty
 }
 
