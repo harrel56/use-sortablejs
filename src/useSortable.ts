@@ -97,6 +97,8 @@ const useSortable = <T>(
           setItems(state => swap(state, extended.oldDraggableIndex!, extended.newDraggableIndex!))
         }
       } else if (isMultiDrag(extended)) {
+        console.log('newIdxs', ...extended.newIndicies)
+
         multiDragUpdate = () => setItems(state => moveItems(state, extended.oldIndicies.map(i => i.index), extended.newIndicies[0].index))
       } else {
         setItems(state => moveItem(state, extended.oldDraggableIndex!, extended.newDraggableIndex!))
@@ -136,6 +138,7 @@ const useSortable = <T>(
       opts?.onEnd?.(extended)
       if (multiDragUpdate) {
         multiDragUpdate()
+        multiDragUpdate = null
       }
     }
 
