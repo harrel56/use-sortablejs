@@ -36,10 +36,10 @@ const DisabledList = () => {
     <div className="example-container">
       <h2>Disabling sorting</h2>
       <div className="example">
-        <div {...getRootProps()}>
+        <div id='disabled-list1' {...getRootProps()}>
           {items.map(item => <div className="item" key={item.id} {...getItemProps(item)}>{item.name}</div>)}
         </div>
-        <div {...getRootProps2()}>
+        <div id='disabled-list2' {...getRootProps2()}>
           {items2.map(item => <div className="item" key={item.id} {...getItemProps2(item)}>{item.name}</div>)}
         </div>
       </div>

@@ -39,9 +39,10 @@ describe('Examples test', () => {
     await page.waitForSelector('.container');
   });
 
-  it('simple list sorting', async () => {
+  it('simple list', async () => {
     await page.waitForSelector('#simple-list');
 
+    await page.$eval('#simple-list', el => el.scrollIntoView())
     let items = (await page.$$('#simple-list .item'))!
     await dragAndDrop(items[0], items[1])
     let newItems = (await page.$$('#simple-list .item'))!
@@ -53,10 +54,11 @@ describe('Examples test', () => {
     await expectSorted(newItems, ['Item 5', 'Item 2', 'Item 1', 'Item 3', 'Item 4'])
   });
 
-  it('shared list sorting', async () => {
+  it('shared list', async () => {
     await page.waitForSelector('#shared-list1');
     await page.waitForSelector('#shared-list2');
 
+    await page.$eval('#shared-list1', el => el.scrollIntoView())
     let items1 = (await page.$$('#shared-list1 .item'))!
     let items2 = (await page.$$('#shared-list2 .item'))!
     await dragAndDrop(items1[0], items2[2])
@@ -106,4 +108,59 @@ describe('Examples test', () => {
     await expectSorted(newItems2, ['Item 3', 'Item 4', 'Item 5', 'Item 6', 'Item 7', 'Item 2'])
   });
 
+  it('clone list', async () => {
+    await page.waitForSelector('#clone-list1');
+    await page.waitForSelector('#clone-list2');
+
+    await page.$eval('#clone-list1', el => el.scrollIntoView())
+    let items1 = (await page.$$('#clone-list1 .item'))!
+    let items2 = (await page.$$('#clone-list2 .item'))!
+    await dragAndDrop(items1[0], items2[2])
+    let newItems1 = (await page.$$('#clone-list1 .item'))!
+    let newItems2 = (await page.$$('#clone-list2 .item'))!
+    await expectSorted(newItems1, ['Item 1', 'Item 2', 'Item 3', 'Item 4'])
+    await expectSorted(newItems2, ['Item 1', 'Item 2', 'Item 1', 'Item 3', 'Item 4'])
+
+    items1 = newItems1
+    items2 = newItems2
+    await dragAndDrop(items2[2], items1[0])
+    newItems1 = (await page.$$('#clone-list1 .item'))!
+    newItems2 = (await page.$$('#clone-list2 .item'))!
+    await expectSorted(newItems1, ['Item 1', 'Item 1', 'Item 2', 'Item 3', 'Item 4'])
+    await expectSorted(newItems2, ['Item 1', 'Item 2', 'Item 1', 'Item 3', 'Item 4'])
+
+    items1 = newItems1
+    await dragAndDrop(items1[0], items1[4])
+    newItems1 = (await page.$$('#clone-list1 .item'))!
+    await expectSorted(newItems1, ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 1'])
+    await expectSorted(newItems2, ['Item 1', 'Item 2', 'Item 1', 'Item 3', 'Item 4'])
+  })
+
+  it('disabled list', async () => {
+    await page.waitForSelector('#disabled-list1');
+    await page.waitForSelector('#disabled-list2');
+
+    await page.$eval('#disabled-list1', el => el.scrollIntoView())
+    let items1 = (await page.$$('#disabled-list1 .item'))!
+    let items2 = (await page.$$('#disabled-list2 .item'))!
+    await dragAndDrop(items1[0], items2[2])
+    let newItems1 = (await page.$$('#disabled-list1 .item'))!
+    let newItems2 = (await page.$$('#disabled-list2 .item'))!
+    await expectSorted(newItems1, ['Item 1', 'Item 2', 'Item 3', 'Item 4'])
+    await expectSorted(newItems2, ['Item 1', 'Item 2', 'Item 1', 'Item 3', 'Item 4'])
+
+    items1 = newItems1
+    items2 = newItems2
+    await dragAndDrop(items2[2], items1[0])
+    newItems1 = (await page.$$('#disabled-list1 .item'))!
+    newItems2 = (await page.$$('#disabled-list2 .item'))!
+    await expectSorted(newItems1, ['Item 1', 'Item 2', 'Item 3', 'Item 4'])
+    await expectSorted(newItems2, ['Item 1', 'Item 2', 'Item 1', 'Item 3', 'Item 4'])
+
+    items1 = newItems1
+    await dragAndDrop(items1[0], items1[3])
+    newItems1 = (await page.$$('#disabled-list1 .item'))!
+    await expectSorted(newItems1, ['Item 1', 'Item 2', 'Item 3', 'Item 4'])
+    await expectSorted(newItems2, ['Item 1', 'Item 2', 'Item 1', 'Item 3', 'Item 4'])
+  })
 });
