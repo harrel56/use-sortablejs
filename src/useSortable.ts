@@ -10,15 +10,7 @@ import {
 } from '@react-sortablejs/types';
 import {SortableContext} from '@react-sortablejs/SortableProvider';
 import {BiDirectionalMap} from 'bi-directional-map/dist';
-import {insert, moveItem, moveItems, remove, removeAll, swap} from '@react-sortablejs/utils';
-
-const shallowClone = (item: any) => {
-  if (typeof item === 'object') {
-    return {...item}
-  } else {
-    return item
-  }
-}
+import {insert, moveItem, moveItems, remove, removeAll, shallowClone, swap} from '@react-sortablejs/utils';
 
 const isClone = (e: SortableEvent): boolean => e.pullMode === 'clone'
 const isSwap = (e: SortableEvent): boolean => !!e.swapItem

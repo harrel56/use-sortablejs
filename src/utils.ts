@@ -1,4 +1,12 @@
 
+export const shallowClone = (item: any) => {
+  if (typeof item === 'object') {
+    return {...item}
+  } else {
+    return item
+  }
+}
+
 export const swap = <T>(arr: T[], idx1: number, idx2: number) => {
   const copy = [...arr]
   const tmp = copy[idx1]

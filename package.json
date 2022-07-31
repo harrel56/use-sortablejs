@@ -2,21 +2,41 @@
   "name": "react-sortablejs",
   "version": "0.1.0",
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+    "test": "jest"
   },
   "dependencies": {
+    "bi-directional-map": "1.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "sortablejs": "1.15.0",
-    "bi-directional-map": "1.0.0"
+    "sortablejs": "1.15.0"
   },
   "devDependencies": {
     "@types/react": "18.0.15",
     "@types/react-dom": "18.0.6",
+    "@types/react-test-renderer": "^18.0.0",
+    "@types/jest": "28.1.6",
     "@types/sortablejs": "1.13.0",
     "ts-loader": "9.3.1",
     "typescript": "4.7.4",
     "webpack": "5.73.0",
-    "webpack-cli": "4.10.0"
+    "webpack-cli": "4.10.0",
+    "@babel/preset-env": "7.18.9",
+    "@babel/preset-react": "7.18.6",
+    "@babel/preset-typescript": "7.18.6",
+    "@testing-library/react": "13.3.0",
+    "@testing-library/jest-dom": "5.16.4",
+    "jest": "28.1.3",
+    "jest-environment-jsdom": "28.1.3",
+    "react-test-renderer": "18.2.0",
+    "playwright": "1.24.2"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^@react-sortablejs(.*)$": "<rootDir>/src$1"
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!bi-directional-map)"
+    ]
   }
 }

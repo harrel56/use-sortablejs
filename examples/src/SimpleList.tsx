@@ -11,7 +11,7 @@ const SimpleList = () => {
   ])
   const {getRootProps, getItemProps} = useSortable(setItems, {animation: 150})
   return (
-    <div className="example-container">
+    <div id='simple-list' className="example-container">
       <h2>Simple list</h2>
       <div {...getRootProps()}>
         {items.map(item => <div className="item" key={item} {...getItemProps(item)}>{item}</div>)}
