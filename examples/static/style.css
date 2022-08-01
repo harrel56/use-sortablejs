@@ -13,9 +13,28 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+header {
+  background: var(--secondary-color);
+  margin-bottom: 5rem;
+  padding: 5rem;
+  text-align: center;
+  border-bottom: 1px solid #d1d1d1;
+  font-size: 5.6rem;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.code-details summary {
+  margin-top: 1rem;
+  user-select: none;
+  cursor: pointer;
+}
+
+.code-details pre {
+  margin-top: 0;
 }
 
 .container {

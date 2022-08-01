@@ -15,6 +15,9 @@ import MultiDragList from '@examples/MultiDragList';
 function App() {
   return (
     <SortableProvider>
+      <header>
+        <h1>use-sortablejs</h1>
+      </header>
       <main className="container">
         <SimpleList/>
         <SharedList/>
