@@ -1,6 +1,5 @@
 import {Dispatch, SetStateAction, useState} from 'react';
-import useSortable from '@react-sortablejs/useSortable';
-import {ItemProps} from '@react-sortablejs/types';
+import {useSortable, ItemProps} from 'use-sortablejs2';
 import CodeSnippet from '@examples/CodeSnippet';
 
 interface Item {

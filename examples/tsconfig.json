@@ -6,8 +6,7 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@react-sortablejs/*": ["src/*"],
-      "@examples/*": ["examples/src/*"]
+      "@examples/*": ["src/*"]
     },
     "allowJs": true, // Allow JavaScript files to be compiled
     "skipLibCheck": true, // Skip type checking of all declaration files
@@ -26,7 +25,7 @@
     "noFallthroughCasesInSwitch": true
   },
   "exclude": [
-    "node_modules",
+    "../node_modules",
     "dist"
   ]
 }

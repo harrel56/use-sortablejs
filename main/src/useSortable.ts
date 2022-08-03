@@ -4,21 +4,21 @@ import {
   ItemProps,
   MoveEventExtended,
   MultiDragUtils,
-  Options,
+  ExtendedOptions,
   RootProps,
   SortableEventExtended
-} from '@react-sortablejs/types';
-import {SortableContext} from '@react-sortablejs/SortableProvider';
+} from 'src/types';
+import {SortableContext} from './SortableProvider';
 import {BiDirectionalMap} from 'bi-directional-map/dist';
-import {insert, moveItem, moveItems, remove, removeAll, replace, shallowClone, swap} from '@react-sortablejs/utils';
+import {insert, moveItem, moveItems, remove, removeAll, replace, shallowClone, swap} from './utils';
 
 const isClone = (e: SortableEvent): boolean => e.pullMode === 'clone'
 const isSwap = (e: SortableEvent): boolean => !!e.swapItem
 const isMultiDrag = (e: SortableEvent): boolean => e.newIndicies.length > 0
 
-const useSortable = <T>(
+export const useSortable = <T>(
   setItems: Dispatch<SetStateAction<T[]>>,
-  options: Options<T> = {},
+  options: ExtendedOptions<T> = {},
   cloneItem: (item: T) => T = shallowClone) => {
 
   const sortableCtx = useContext(SortableContext)
@@ -177,5 +177,3 @@ const useSortable = <T>(
     } as ItemProps)
   }
 }
-
-export default useSortable

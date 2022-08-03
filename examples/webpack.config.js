@@ -3,7 +3,6 @@ const path = require('path');
 module.exports = {
   mode: 'development',
   entry: {
-    'react-sortablejs': '@react-sortablejs/useSortable.ts',
     'examples': '@examples/App.tsx'
   },
   output: {
@@ -13,8 +12,7 @@ module.exports = {
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
     alias: {
-      '@react-sortablejs': path.resolve(__dirname, './src'),
-      '@examples': path.resolve(__dirname, './examples/src')
+      '@examples': path.resolve(__dirname, './src')
     }
   },
   module: {

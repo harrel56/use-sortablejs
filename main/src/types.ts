@@ -1,5 +1,5 @@
 import {RefCallback} from 'react';
-import Sortable, {MoveEvent, SortableEvent} from 'sortablejs';
+import {MoveEvent, SortableEvent, Utils, Options} from 'sortablejs';
 
 export interface RootProps {
   ref: RefCallback<HTMLElement>
@@ -9,11 +9,14 @@ export interface ItemProps {
   ref: RefCallback<HTMLElement>
 }
 
-export interface MultiDragUtils extends Sortable.Utils {
+export interface MultiDragUtils extends Utils {
   deselect: (e: HTMLElement) => void
 }
 
-export interface Options<T> extends Sortable.Options {
+type methods = 'onStart' | 'onEnd' | 'onAdd' | 'onClone' | 'onChoose' | 'onUnchoose' |
+  'onUpdate' | 'onSort' | 'onRemove' | 'onFilter' | 'onMove' | 'onChange'
+
+export interface ExtendedOptions<T> extends Omit<Options, methods> {
   /**
    * Element dragging started
    */

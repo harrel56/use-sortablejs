@@ -31,7 +31,7 @@ describe('Examples test', () => {
     browser = await chromium.launch({headless: false})
     ctx = await browser.newContext()
     page = await ctx.newPage()
-    await page.goto(`file:${path.join(__dirname, '../examples/static/index.html')}`)
+    await page.goto(`file:${path.join(__dirname, '../static/index.html')}`)
   });
 
   afterAll(() => browser.close());

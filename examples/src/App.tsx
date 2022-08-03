@@ -7,7 +7,7 @@ import GridList from '@examples/GridList';
 import DisabledList from '@examples/DisabledList';
 import HandleList from '@examples/HandleList';
 import FilterList from '@examples/FilterList';
-import SortableProvider from '@react-sortablejs/SortableProvider';
+import {SortableProvider} from 'use-sortablejs2';
 import SwapList from '@examples/SwapList';
 import Sortable, {MultiDrag, Swap} from 'sortablejs';
 import MultiDragList from '@examples/MultiDragList';

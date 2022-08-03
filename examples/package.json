@@ -1,16 +1,16 @@
 {
-  "name": "react-sortablejs",
+  "name": "use-sortablejs-examples",
   "version": "0.1.0",
   "scripts": {
-    "build": "webpack",
-    "test": "jest"
+    "build:examples": "webpack",
+    "test:examples": "jest"
   },
   "dependencies": {
-    "bi-directional-map": "1.0.0",
     "prismjs": "1.28.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "sortablejs": "1.15.0"
+    "sortablejs": "1.15.0",
+    "use-sortablejs2": "^0.1.1"
   },
   "devDependencies": {
     "@babel/preset-env": "7.18.9",
@@ -18,7 +18,6 @@
     "@types/jest": "28.1.6",
     "@types/react": "18.0.15",
     "@types/react-dom": "18.0.6",
-    "@types/react-test-renderer": "^18.0.0",
     "@types/sortablejs": "1.13.0",
     "@types/prismjs": "1.26.0",
     "jest": "28.1.3",

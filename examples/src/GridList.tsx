@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import useSortable from '@react-sortablejs/useSortable';
+import {useSortable} from 'use-sortablejs2';
 import CodeSnippet from '@examples/CodeSnippet';
 
 const GridList = () => {

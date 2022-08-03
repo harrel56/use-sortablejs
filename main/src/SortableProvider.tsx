@@ -8,7 +8,7 @@ interface ContextContent {
 
 export const SortableContext = createContext(null) as Context<ContextContent | null>
 
-const SortableProvider = (({children}: PropsWithChildren) => {
+export const SortableProvider = (({children}: PropsWithChildren) => {
 
   const sortables = useRef(new Map<HTMLElement, BiDirectionalMap<HTMLElement, any>>())
 
@@ -26,5 +26,3 @@ const SortableProvider = (({children}: PropsWithChildren) => {
     </SortableContext.Provider>
   )
 })
-
-export default SortableProvider
