@@ -1,5 +1,5 @@
 import {useRef, useState} from 'react';
-import {useSortable} from 'use-sortablejs2';
+import {useSortable} from 'use-sortablejs';
 import CodeSnippet from '@examples/CodeSnippet';
 
 const CloningList = () => {
