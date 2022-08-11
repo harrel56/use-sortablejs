@@ -1,11 +1,11 @@
-name: build-examples-release
+name: build-examples
 
 on:
   push:
     branches: [ master ]
 
 jobs:
-  build:
+  build-release:
     runs-on: ubuntu-latest
     strategy:
       matrix:

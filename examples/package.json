@@ -6,7 +6,7 @@
   "scripts": {
     "build:examples": "webpack",
     "preinstall:next": "node prepareNextConfig.js",
-    "build:examples:next": "webpack --config webpack.next.config.js",
+    "build:examples:next": "webpack --config webpack.next.config.cjs",
     "test:examples": "jest"
   },
   "dependencies": {
