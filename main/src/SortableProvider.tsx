@@ -1,8 +1,8 @@
 import {Context, createContext, PropsWithChildren, useRef} from 'react';
-import {BiDirectionalMap} from 'bi-directional-map/dist';
+import {BiDiMap} from 'src/utils';
 
 interface ContextContent {
-  registerSortable: (sortable: HTMLElement, items: BiDirectionalMap<HTMLElement, any>) => void
+  registerSortable: (sortable: HTMLElement, items: BiDiMap<HTMLElement, any>) => void
   findItem: <T, >(sortable: HTMLElement, item: HTMLElement) => T
 }
 
@@ -10,9 +10,9 @@ export const SortableContext = createContext(null) as Context<ContextContent | n
 
 export const SortableProvider = (({children}: PropsWithChildren) => {
 
-  const sortables = useRef(new Map<HTMLElement, BiDirectionalMap<HTMLElement, any>>())
+  const sortables = useRef(new Map<HTMLElement, BiDiMap<HTMLElement, any>>())
 
-  const registerSortable = (sortable: HTMLElement, items: BiDirectionalMap<HTMLElement, any>) => {
+  const registerSortable = (sortable: HTMLElement, items: BiDiMap<HTMLElement, any>) => {
     sortables.current.set(sortable, items)
   }
 

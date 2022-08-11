@@ -9,8 +9,7 @@ import {
   SortableEventExtended
 } from 'src/types';
 import {SortableContext} from './SortableProvider';
-import {BiDirectionalMap} from 'bi-directional-map/dist';
-import {insert, moveItem, moveItems, remove, removeAll, replace, shallowClone, swap} from './utils';
+import {BiDiMap, insert, moveItem, moveItems, remove, removeAll, replace, shallowClone, swap} from './utils';
 
 const isClone = (e: SortableEvent): boolean => e.pullMode === 'clone'
 const isSwap = (e: SortableEvent): boolean => !!e.swapItem
@@ -28,7 +27,7 @@ export const useSortable = <T>(
   const {registerSortable, findItem} = sortableCtx
 
   const sortableRef = useRef<HTMLElement | null>(null)
-  const itemRefs = useRef(new BiDirectionalMap<HTMLElement, T>)
+  const itemRefs = useRef(new BiDiMap<HTMLElement, T>())
 
   const extendSortableEvent = (e: SortableEvent) => {
     const extended = e as SortableEventExtended<T>

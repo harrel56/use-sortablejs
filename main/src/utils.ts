@@ -52,3 +52,25 @@ export const replace = <T>(arr: T[], idx: number, item: T) => {
   copy[idx] = item
   return copy
 }
+
+export class BiDiMap<K, V> {
+  #map = new Map<K, V>()
+  #reversed = new Map<V, K>()
+
+  set(key: K, value: V) {
+    this.#map.delete(this.#reversed.get(value)!);
+    this.#reversed.delete(this.#map.get(key)!);
+    this.#map.set(key, value)
+    this.#reversed.set(value, key)
+    return this
+  }
+
+  getValue(key: K) {
+    return this.#map.get(key)
+  }
+
+  deleteValue(value: V) {
+    this.#map.delete(this.#reversed.get(value)!)
+    return this.#reversed.delete(value)
+  }
+}

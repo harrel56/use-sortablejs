@@ -1,11 +1,10 @@
 {
   "name": "use-sortablejs",
-  "version": "0.1.3",
+  "version": "0.1.7",
   "type": "module",
   "source": "src/index.ts",
   "main": "build/index.js",
   "types": "build/index.d.ts",
-  "files": ["build"],
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -13,10 +12,7 @@
   },
   "scripts": {
     "build:use-sortablejs": "parcel build & node distribute.js",
-    "publish:use-sortablejs": "npm publish"
-  },
-  "dependencies": {
-    "bi-directional-map": "1.0.0"
+    "publish:use-sortablejs": "cd build && npm publish"
   },
   "peerDependencies": {
     "react": ">=16.8.0",
