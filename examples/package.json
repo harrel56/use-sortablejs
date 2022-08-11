@@ -2,11 +2,10 @@
   "name": "use-sortablejs-examples",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "build:examples": "webpack",
-    "preinstall:next": "node prepareNextConfig.js",
-    "build:examples:next": "webpack --config webpack.next.config.cjs",
+    "preinstall:next": "node prepareNextConfig.mjs",
+    "build:examples:next": "webpack --config webpack.next.config.js",
     "test:examples": "jest"
   },
   "dependencies": {
