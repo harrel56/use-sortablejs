@@ -11,7 +11,8 @@
     "url": "git://github.com/harrel56/use-sortablejs.git"
   },
   "scripts": {
-    "build:use-sortablejs": "parcel build & node distribute.js",
+    "build:use-sortablejs": "parcel build",
+    "distribute:use-sortablejs": "node distribute.js",
     "publish:use-sortablejs": "cd build && npm publish"
   },
   "peerDependencies": {
