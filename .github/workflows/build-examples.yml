@@ -36,6 +36,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+      - run: npm i
+        working-directory: ./main
+      - run: npm build:use-sortablejs
+        working-directory: ./main
       - run: npm run preinstall:next
         working-directory: ./examples
       - run: npm i

@@ -8,6 +8,9 @@
     "paths": {
       "@examples/*": [
         "src/*"
+      ],
+      "use-sortablejs": [
+        "../main/build/index.d.ts"
       ]
     },
     "allowJs": true,
