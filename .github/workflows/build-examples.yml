@@ -38,7 +38,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm i
         working-directory: ./main
-      - run: npm build:use-sortablejs
+      - run: npm run build:use-sortablejs
         working-directory: ./main
       - run: npm run preinstall:next
         working-directory: ./examples
