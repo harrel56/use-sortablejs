@@ -2,8 +2,11 @@
   "name": "use-sortablejs-examples",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "build:examples": "webpack",
+    "preinstall:next": "node prepareNextConfig.js",
+    "build:examples:next": "webpack --config webpack.next.config.js",
     "test:examples": "jest"
   },
   "dependencies": {
@@ -11,7 +14,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "sortablejs": "1.15.0",
-    "use-sortablejs": "^0.1.7"
+    "use-sortablejs": "*"
   },
   "devDependencies": {
     "@babel/preset-env": "7.18.9",

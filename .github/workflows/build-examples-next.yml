@@ -1,4 +1,4 @@
-name: build-examples
+name: build-examples-next
 
 on:
   push:
@@ -17,9 +17,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+      - run: npm run preinstall:next
+        working-directory: ./examples
       - run: npm i
         working-directory: ./examples
-      - run: npm run build:examples
+      - run: npm run build:examples:next
         working-directory: ./examples
       - run: npm run test:examples
         working-directory: ./examples

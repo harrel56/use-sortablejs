@@ -1,0 +1,25 @@
+name: build-examples-release
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm i
+        working-directory: ./examples
+      - run: npm run build:examples
+        working-directory: ./examples
+      - run: npm run test:examples
+        working-directory: ./examples
