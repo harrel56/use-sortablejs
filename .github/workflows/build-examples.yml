@@ -17,7 +17,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: cd examples
       - run: npm i
+        working-directory: ./examples
       - run: npm run build:examples
+        working-directory: ./examples
       - run: npm run test:examples
+        working-directory: ./examples
