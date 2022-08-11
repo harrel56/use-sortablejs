@@ -28,7 +28,7 @@ describe('Examples test', () => {
   }
 
   beforeAll(async () => {
-    browser = await chromium.launch({headless: false})
+    browser = await chromium.launch({headless: true})
     ctx = await browser.newContext()
     page = await ctx.newPage()
     await page.goto(`file:${path.join(__dirname, '../static/index.html')}`)
