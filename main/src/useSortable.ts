@@ -24,9 +24,9 @@ export const useSortable = <T>(
   if (!sortableCtx) {
     throw new Error('Missing Sortable context')
   }
-  const {registerSortable, findItem} = sortableCtx
+  const {registerSortable, unregisterSortable,findItem} = sortableCtx
 
-  const sortableRef = useRef<HTMLElement | null>(null)
+  const sortableRef = useRef<Sortable | null>(null)
   const itemRefs = useRef(new BiDiMap<HTMLElement, T>())
 
   const extendSortableEvent = (e: SortableEvent) => {
@@ -153,12 +153,14 @@ export const useSortable = <T>(
   }
 
   const refCallback = useCallback((node) => {
-    sortableRef.current = node
-    if (!node) {
-      return
+    if (node) {
+      registerSortable(node, itemRefs.current)
+      sortableRef.current = Sortable.create(node, extendOptions(node, options as SortableOptions))
+    } else {
+      unregisterSortable(sortableRef.current!.el)
+      sortableRef.current!.destroy()
+      sortableRef.current = null;
     }
-    registerSortable(node, itemRefs.current)
-    Sortable.create(node, extendOptions(node, options as SortableOptions))
   }, []) as RefCallback<HTMLElement>
 
   return {

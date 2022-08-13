@@ -3,6 +3,7 @@ import {BiDiMap} from './utils';
 
 interface ContextContent {
   registerSortable: (sortable: HTMLElement, items: BiDiMap<HTMLElement, any>) => void
+  unregisterSortable: (sortable: HTMLElement) => void
   findItem: <T, >(sortable: HTMLElement, item: HTMLElement) => T
 }
 
@@ -16,12 +17,16 @@ export const SortableProvider = (({children}: PropsWithChildren) => {
     sortables.current.set(sortable, items)
   }
 
+  const unregisterSortable = (sortable: HTMLElement) => {
+    sortables.current.delete(sortable)
+  }
+
   const findItem = <T, >(sortable: HTMLElement, item: HTMLElement) => {
     return sortables.current.get(sortable)!.getValue(item) as T
   }
 
   return (
-    <SortableContext.Provider value={{registerSortable, findItem}}>
+    <SortableContext.Provider value={{registerSortable, unregisterSortable, findItem}}>
       {children}
     </SortableContext.Provider>
   )
