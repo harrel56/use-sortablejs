@@ -6,7 +6,7 @@
     "preinstall:next": "node scripts/prepareNextConfig.mjs",
     "build:release": "webpack",
     "build:next": "webpack --config webpack.next.config.js",
-    "distribute:release": "node scripts/distribute.mjs",
+    "distribute": "node scripts/distribute.mjs",
     "test": "jest"
   },
   "dependencies": {
