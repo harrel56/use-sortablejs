@@ -1,11 +1,13 @@
 {
   "name": "use-sortablejs",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "type": "module",
   "source": "src/index.ts",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "license": "MIT",
+  "homepage": "https://harrel56.github.io/use-sortablejs",
+  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "git://github.com/harrel56/use-sortablejs.git"
@@ -17,11 +19,19 @@
   },
   "peerDependencies": {
     "react": "^17.0.0 || ^18.0.0",
-    "sortablejs": "^1.0.0"
+    "@types/react": "^17.0.0 || ^18.0.0",
+    "sortablejs": "^1.0.0",
+    "@types/sortablejs": "^1.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    },
+    "@types/sortablejs": {
+      "optional": true
+    }
   },
   "devDependencies": {
-    "@types/react": "18.0.17",
-    "@types/sortablejs": "1.13.0",
     "@parcel/packager-ts": "2.7.0",
     "@parcel/transformer-typescript-types": "2.7.0",
     "parcel": "2.7.0",
