@@ -30,7 +30,7 @@ function App() {
         <SwapList/>
         <MultiDragList/>
         <footer className='footer'>
-          <p>Source code on: <a href='https://gitlab.com/org.harrel/use-sortablejs'>GitLab</a></p>
+          <p>Source code on: <a href='https://github.com/harrel56/use-sortablejs'>GitHub</a>, <a href='https://gitlab.com/org.harrel/use-sortablejs'>GitLab</a></p>
         </footer>
       </main>
     </SortableProvider>
