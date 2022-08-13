@@ -1,5 +1,5 @@
 import {Context, createContext, PropsWithChildren, useRef} from 'react';
-import {BiDiMap} from 'src/utils';
+import {BiDiMap} from './utils';
 
 interface ContextContent {
   registerSortable: (sortable: HTMLElement, items: BiDiMap<HTMLElement, any>) => void

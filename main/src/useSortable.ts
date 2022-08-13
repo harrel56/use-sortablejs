@@ -7,7 +7,7 @@ import {
   ExtendedOptions,
   RootProps,
   SortableEventExtended
-} from 'src/types';
+} from './types';
 import {SortableContext} from './SortableProvider';
 import {BiDiMap, insert, moveItem, moveItems, remove, removeAll, replace, shallowClone, swap} from './utils';
 

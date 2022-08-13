@@ -13,7 +13,7 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js'],
     alias: {
       '@examples': path.resolve(__dirname, './src'),
-      'use-sortablejs': path.resolve(__dirname, '../main/build')
+      'use-sortablejs': path.resolve(__dirname, './lib')
     }
   },
   module: {
