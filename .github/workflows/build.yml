@@ -19,7 +19,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm i
         working-directory: ./main
-      - run: npm run build:use-sortablejs
+      - run: npm run build
         working-directory: ./main
 
   build-examples-release:
@@ -35,10 +35,33 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm i
         working-directory: ./examples
-      - run: npm run build:examples
+      - run: npm run build:release
         working-directory: ./examples
-      - run: npm run test:examples
+      - run: npm run test
         working-directory: ./examples
+      - name: Setup Pages
+        uses: actions/configure-pages@v1
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: './examples/build'
+
+  deploy-examples-release:
+    needs: build-examples-release
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
 
   build-examples-next:
     runs-on: ubuntu-latest
@@ -55,7 +78,7 @@ jobs:
         working-directory: ./examples
       - run: npm i
         working-directory: ./examples
-      - run: npm run build:examples:next
+      - run: npm run build:next
         working-directory: ./examples
-      - run: npm run test:examples
+      - run: npm run test
         working-directory: ./examples

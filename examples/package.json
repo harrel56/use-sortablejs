@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build:examples": "webpack",
-    "preinstall:next": "node prepareNextConfig.mjs",
-    "build:examples:next": "webpack --config webpack.next.config.js",
-    "test:examples": "jest"
+    "preinstall:next": "node scripts/prepareNextConfig.mjs",
+    "build:release": "webpack",
+    "build:next": "webpack --config webpack.next.config.js",
+    "distribute:release": "node scripts/distribute.mjs",
+    "test": "jest"
   },
   "dependencies": {
     "prismjs": "1.28.0",
