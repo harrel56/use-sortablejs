@@ -1,6 +1,6 @@
 {
   "name": "use-sortablejs",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "type": "module",
   "source": "src/index.ts",
   "main": "build/index.js",
@@ -22,14 +22,6 @@
     "@types/react": "^17.0.0 || ^18.0.0",
     "sortablejs": "^1.0.0",
     "@types/sortablejs": "^1.0.0"
-  },
-  "peerDependenciesMeta": {
-    "@types/react": {
-      "optional": true
-    },
-    "@types/sortablejs": {
-      "optional": true
-    }
   },
   "devDependencies": {
     "@parcel/packager-ts": "2.7.0",
