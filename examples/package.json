@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "preinstall:next": "node scripts/prepareNextConfig.mjs",
-    "build:release": "webpack",
-    "build:next": "webpack --config webpack.next.config.js",
+    "build:release": "webpack && npm run distribute",
+    "build:next": "webpack --config webpack.next.config.js && npm run distribute",
     "distribute": "node scripts/distribute.mjs",
     "test": "jest"
   },

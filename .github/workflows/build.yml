@@ -37,8 +37,6 @@ jobs:
         working-directory: ./examples
       - run: npm run build:release
         working-directory: ./examples
-      - run: npm run distribute
-        working-directory: ./examples
       - run: npm run test
         working-directory: ./examples
       - name: Setup Pages
