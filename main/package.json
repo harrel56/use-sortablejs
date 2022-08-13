@@ -5,9 +5,10 @@
   "source": "src/index.ts",
   "main": "build/index.js",
   "types": "build/index.d.ts",
+  "sideEffects": false,
   "license": "MIT",
   "homepage": "https://harrel56.github.io/use-sortablejs",
-  "sideEffects": false,
+  "description": "SortableJS ported to React hooks",
   "repository": {
     "type": "git",
     "url": "git://github.com/harrel56/use-sortablejs.git"

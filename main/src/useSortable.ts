@@ -56,7 +56,6 @@ export const useSortable = <T>(
       // @ts-ignore
       extendedOpts[event] = (e: SortableEvent) => {
         const extended = extendSortableEvent(e)
-        console.log(event, extended)
         // @ts-ignore
         opts?.[event]?.(extended)
       }
@@ -67,7 +66,6 @@ export const useSortable = <T>(
       if (isClone(extended)) {
         extended.stateItem = cloneItem(extended.stateItem)
       }
-      console.log('onAdd', extended)
       options?.onAdd?.(extended)
       if (isClone(extended)) {
         extended.clone.parentElement!.insertBefore(extended.item, extended.clone.nextSibling)
@@ -94,7 +92,6 @@ export const useSortable = <T>(
     let swapping = false
     extendedOpts.onUpdate = e => {
       const extended = extendSortableEvent(e)
-      console.log('onUpdate', extended)
       options?.onUpdate?.(extended)
       if (isSwap(extended)) {
         const delay = extendedOpts.animation ? Math.max(extendedOpts.animation, 0) : 0
@@ -112,7 +109,6 @@ export const useSortable = <T>(
 
     extendedOpts.onRemove = e => {
       const extended = extendSortableEvent(e)
-      console.log('onRemove', extended)
       options?.onRemove?.(extended)
       if (isSwap(extended)) {
         const delay = extendedOpts.animation ? Math.max(extendedOpts.animation, 0) : 0
@@ -134,7 +130,6 @@ export const useSortable = <T>(
     }
 
     extendedOpts.onMove = (e, originalEvent) => {
-      console.log('onMove', e)
       const extended = e as MoveEventExtended<T>
       const currentItem = itemRefs.current.getValue(e.dragged)
       if (!currentItem || swapping) {
@@ -147,7 +142,6 @@ export const useSortable = <T>(
 
     extendedOpts.onEnd = e => {
       const extended = extendSortableEvent(e)
-      console.log('onEnd', extended)
       opts?.onEnd?.(extended)
       if (multiDragUpdate) {
         multiDragUpdate()
