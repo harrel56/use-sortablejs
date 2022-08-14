@@ -1,6 +1,6 @@
 {
   "name": "use-sortablejs",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "type": "module",
   "source": "src/index.ts",
   "main": "build/index.js",
