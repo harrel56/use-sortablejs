@@ -1,17 +1,19 @@
 {
   "name": "use-sortablejs",
-  "version": "0.1.10",
+  "version": "1.0.0",
   "type": "module",
   "source": "src/index.ts",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "sideEffects": false,
   "license": "MIT",
+  "author": "https://github.com/harrel56",
   "homepage": "https://harrel56.github.io/use-sortablejs",
   "description": "SortableJS ported to React hooks",
   "repository": {
     "type": "git",
-    "url": "git://github.com/harrel56/use-sortablejs.git"
+    "url": "git://github.com/harrel56/use-sortablejs.git",
+    "directory": "main"
   },
   "scripts": {
     "build": "parcel build && npm run distribute",
