@@ -28,7 +28,7 @@ describe('Examples test', () => {
   }
 
   beforeAll(async () => {
-    browser = await chromium.launch({headless: true})
+    browser = await chromium.launch({headless: false})
     ctx = await browser.newContext()
     page = await ctx.newPage()
     await page.goto(`file:${path.join(__dirname, '../build/index.html')}`)
@@ -274,11 +274,11 @@ describe('Examples test', () => {
     items2 = newItems2
     await items1[2].click()
     await items1[3].click()
-    await dragAndDrop(items1[1], items2[1], STEPS)
+    await dragAndDrop(items1[3], items2[1], STEPS)
     newItems1 = (await page.$$('#multi-drag-list1 .item'))!
     newItems2 = (await page.$$('#multi-drag-list2 .item'))!
     await expectSorted(newItems1, [])
-    await expectSorted(newItems2, ['Item 5', 'Item 6', 'Item 2', 'Item 3', 'Item 4', 'Item 1', 'Item 7', 'Item 8'])
+    await expectSorted(newItems2, ['Item 5', 'Item 2', 'Item 3', 'Item 4', 'Item 1', 'Item 6', 'Item 7', 'Item 8'])
 
     let selectedItems = (await page.$$('#multi-drag-list2 .multi-drag'))!
     expect(selectedItems).toEqual([])
@@ -286,12 +286,12 @@ describe('Examples test', () => {
     const list1 = (await page.$('#multi-drag-list1'))!
     items2 = newItems2
     await items2[0].click()
-    await items2[4].click()
-    await dragAndDrop(items2[0], list1, STEPS)
+    await items2[5].click()
+    await dragAndDrop(items2[5], list1, STEPS)
     newItems1 = (await page.$$('#multi-drag-list1 .item'))!
     newItems2 = (await page.$$('#multi-drag-list2 .item'))!
-    await expectSorted(newItems1, ['Item 5', 'Item 4'])
-    await expectSorted(newItems2, ['Item 6', 'Item 2', 'Item 3', 'Item 1', 'Item 7', 'Item 8'])
+    await expectSorted(newItems1, ['Item 5', 'Item 6'])
+    await expectSorted(newItems2, ['Item 2', 'Item 3', 'Item 4', 'Item 1', 'Item 7', 'Item 8'])
 
     items1 = newItems1
     items2 = newItems2
@@ -299,6 +299,6 @@ describe('Examples test', () => {
     await items1[1].click()
     await items2[1].click()
     selectedItems = (await page.$$('#multi-drag-list2 .multi-drag'))!
-    expect(await selectedItems[0].textContent()).toEqual('Item 2')
+    expect(await selectedItems[0].textContent()).toEqual('Item 3')
   });
 });

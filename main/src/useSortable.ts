@@ -81,7 +81,8 @@ export const useSortable = <T>(
         }, delay)
       } else if (isMultiDrag(extended)) {
         extended.newIndicies.forEach(el => el.multiDragElement.remove())
-        setItems(state => insert(state, extended.newDraggableIndex!, ...extended.stateItems))
+        const minIdx = Math.min(...extended.newIndicies.map(el => el.index))
+        setItems(state => insert(state, minIdx, ...extended.stateItems))
       } else {
         extended.item.remove()
         setItems(state => insert(state, extended.newDraggableIndex!, extended.stateItem))
