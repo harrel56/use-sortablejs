@@ -28,6 +28,7 @@ export const useSortable = <T>(
   }
   const {registerSortable, unregisterSortable, findItem} = sortableCtx
 
+  const defaultOptions = useRef<SortableOptions>({})
   const sortableRef = useRef<Sortable | null>(null)
   const itemRefs = useRef(new BiDiMap<HTMLElement, T>())
 
@@ -35,9 +36,10 @@ export const useSortable = <T>(
     if (!sortableRef.current) {
       return
     }
+    sortableRef.current.options = {...defaultOptions.current}
     Object.entries(options).forEach(el => sortableRef.current!.option(el[0] as keyof ExtendedOptions<any>, el[1]))
     extendEvents(sortableRef.current, options as SortableOptions)
-  }, [JSON.stringify(options, jsonReplacer), ...getEvents(options)])
+  }, [sortableRef.current, JSON.stringify(options, jsonReplacer), ...getEvents(options)])
 
   const extendSortableEvent = (e: SortableEvent) => {
     const extended = e as SortableEventExtended<T>
@@ -79,7 +81,6 @@ export const useSortable = <T>(
           swapping = false
         }, delay)
       } else if (isMultiDrag(extended)) {
-        console.log(extended)
         extended.newIndicies.forEach(el => el.multiDragElement.remove())
         const minIdx = Math.min(...extended.newIndicies.map(el => el.index))
         setItems(state => insert(state, minIdx, ...extended.stateItems))
@@ -164,8 +165,8 @@ export const useSortable = <T>(
   const refCallback = useCallback((node) => {
     if (node) {
       registerSortable(node, itemRefs.current)
-      sortableRef.current = Sortable.create(node, options as SortableOptions)
-      extendEvents(sortableRef.current, options as SortableOptions)
+      sortableRef.current = Sortable.create(node)
+      defaultOptions.current = {...sortableRef.current.options}
     } else {
       unregisterSortable(sortableRef.current!.el)
       sortableRef.current!.destroy()
