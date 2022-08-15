@@ -90,6 +90,18 @@ textarea {
   border-bottom-right-radius: 5px;
 }
 
+.item--ghost {
+  opacity: 0.4;
+}
+
+.item--chosen {
+  background: var(--swap-color);
+}
+
+.item--drag {
+  background: #9b4dca;
+}
+
 .handle::before {
   content: '\266f';
   margin-right: 10px;
