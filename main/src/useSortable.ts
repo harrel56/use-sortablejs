@@ -36,7 +36,9 @@ export const useSortable = <T>(
     if (!sortableRef.current) {
       return
     }
-    sortableRef.current.options = {...defaultOptions.current}
+    Object.entries(defaultOptions.current)
+      .filter(el => !options.hasOwnProperty(el[0]))
+      .forEach(el => sortableRef.current!.option(el[0] as keyof ExtendedOptions<any>, el[1]))
     Object.entries(options).forEach(el => sortableRef.current!.option(el[0] as keyof ExtendedOptions<any>, el[1]))
     extendEvents(sortableRef.current, options as SortableOptions)
   }, [sortableRef.current, JSON.stringify(options, jsonReplacer), ...getEvents(options)])
@@ -165,7 +167,8 @@ export const useSortable = <T>(
   const refCallback = useCallback((node) => {
     if (node) {
       registerSortable(node, itemRefs.current)
-      sortableRef.current = Sortable.create(node)
+      // @ts-ignore - multiDragKey is initialized to null but can be replaced with empty string
+      sortableRef.current = Sortable.create(node, {multiDragKey: ''})
       defaultOptions.current = {...sortableRef.current.options}
     } else {
       unregisterSortable(sortableRef.current!.el)
