@@ -27,6 +27,15 @@ code {
     monospace;
 }
 
+textarea {
+    height: 300px;
+    resize: none;
+}
+
+.button-small {
+    width: 20rem;
+}
+
 .code-details summary {
   margin-top: 1rem;
   user-select: none;

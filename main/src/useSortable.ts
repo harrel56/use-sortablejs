@@ -1,19 +1,21 @@
-import {Dispatch, RefCallback, SetStateAction, useCallback, useContext, useRef} from 'react';
-import Sortable, {SortableEvent, SortableOptions} from 'sortablejs';
-import {
-  ItemProps,
-  MoveEventExtended,
-  MultiDragUtils,
-  ExtendedOptions,
-  RootProps,
-  SortableEventExtended
-} from './types';
+import {Dispatch, RefCallback, SetStateAction, useCallback, useContext, useEffect, useRef} from 'react';
+import Sortable, {MoveEvent, SortableEvent, SortableOptions} from 'sortablejs';
+import {ExtendedOptions, ItemProps, MoveEventExtended, MultiDragUtils, RootProps, SortableEventExtended} from './types';
 import {SortableContext} from './SortableProvider';
 import {BiDiMap, insert, moveItem, moveItems, remove, removeAll, replace, shallowClone, swap} from './utils';
 
 const isClone = (e: SortableEvent): boolean => e.pullMode === 'clone'
 const isSwap = (e: SortableEvent): boolean => !!e.swapItem
 const isMultiDrag = (e: SortableEvent): boolean => e.newIndicies.length > 0
+
+const simpleEvents: (keyof ExtendedOptions<any>)[] = ['onStart', 'onClone', 'onChoose', 'onUnchoose', 'onSort', 'onFilter', 'onChange']
+const allEvents: Set<string> = new Set([...simpleEvents, 'onAdd', 'onRemove', 'onUpdate', 'onMove', 'onEnd'] as (keyof ExtendedOptions<any>)[])
+const jsonReplacer = (k: string, v: any) => allEvents.has(k) ? undefined : v
+const getEvents = (options: any) => {
+  const res = [] as (Function | undefined)[]
+  allEvents.forEach(event => res.push(options[event]))
+  return res
+}
 
 export const useSortable = <T>(
   setItems: Dispatch<SetStateAction<T[]>>,
@@ -24,10 +26,18 @@ export const useSortable = <T>(
   if (!sortableCtx) {
     throw new Error('Missing Sortable context')
   }
-  const {registerSortable, unregisterSortable,findItem} = sortableCtx
+  const {registerSortable, unregisterSortable, findItem} = sortableCtx
 
   const sortableRef = useRef<Sortable | null>(null)
   const itemRefs = useRef(new BiDiMap<HTMLElement, T>())
+
+  useEffect(() => {
+    if (!sortableRef.current) {
+      return
+    }
+    Object.entries(options).forEach(el => sortableRef.current!.option(el[0] as keyof ExtendedOptions<any>, el[1]))
+    extendEvents(sortableRef.current, options as SortableOptions)
+  }, [JSON.stringify(options, jsonReplacer), ...getEvents(options)])
 
   const extendSortableEvent = (e: SortableEvent) => {
     const extended = e as SortableEventExtended<T>
@@ -49,19 +59,8 @@ export const useSortable = <T>(
     }
   }) as (item: T) => RefCallback<HTMLElement>
 
-  const extendOptions = (node: HTMLElement, opts: SortableOptions) => {
-    const extendedOpts = {...opts}
-    const simpleEvents: (keyof SortableOptions)[] = ['onStart', 'onClone', 'onChoose', 'onUnchoose', 'onSort', 'onFilter', 'onChange']
-    for (let event of simpleEvents) {
-      // @ts-ignore
-      extendedOpts[event] = (e: SortableEvent) => {
-        const extended = extendSortableEvent(e)
-        // @ts-ignore
-        opts?.[event]?.(extended)
-      }
-    }
-
-    extendedOpts.onAdd = e => {
+  const extendEvents = (sortable: Sortable, opts: SortableOptions) => {
+    const onAdd = (e: SortableEvent) => {
       const extended = extendSortableEvent(e)
       if (isClone(extended)) {
         extended.stateItem = cloneItem(extended.stateItem)
@@ -72,14 +71,15 @@ export const useSortable = <T>(
         extended.clone.remove()
         setItems(state => insert(state, extended.newDraggableIndex!, extended.stateItem))
       } else if (isSwap(extended)) {
-        const delay = extendedOpts.animation ? Math.max(extendedOpts.animation, 0) : 0
+        const delay = opts.animation ? Math.max(opts.animation, 0) : 0
         swapping = true
         setTimeout(() => {
-          node.insertBefore(extended.swapItem!, null)
+          sortable.el.insertBefore(extended.swapItem!, null)
           setItems(state => replace(state, extended.newDraggableIndex!, extended.stateItem))
           swapping = false
         }, delay)
       } else if (isMultiDrag(extended)) {
+        console.log(extended)
         extended.newIndicies.forEach(el => el.multiDragElement.remove())
         const minIdx = Math.min(...extended.newIndicies.map(el => el.index))
         setItems(state => insert(state, minIdx, ...extended.stateItems))
@@ -91,11 +91,11 @@ export const useSortable = <T>(
 
     let multiDragUpdate: (() => void) | null = null
     let swapping = false
-    extendedOpts.onUpdate = e => {
+    const onUpdate = (e: SortableEvent) => {
       const extended = extendSortableEvent(e)
       options?.onUpdate?.(extended)
       if (isSwap(extended)) {
-        const delay = extendedOpts.animation ? Math.max(extendedOpts.animation, 0) : 0
+        const delay = opts.animation ? Math.max(opts.animation, 0) : 0
         swapping = true
         setTimeout(() => {
           setItems(state => swap(state, extended.oldDraggableIndex!, extended.newDraggableIndex!))
@@ -108,29 +108,29 @@ export const useSortable = <T>(
       }
     }
 
-    extendedOpts.onRemove = e => {
+    const onRemove = (e: SortableEvent) => {
       const extended = extendSortableEvent(e)
       options?.onRemove?.(extended)
       if (isSwap(extended)) {
-        const delay = extendedOpts.animation ? Math.max(extendedOpts.animation, 0) : 0
+        const delay = opts.animation ? Math.max(opts.animation, 0) : 0
         swapping = true
         setTimeout(() => {
-          node.insertBefore(extended.item, null)
+          sortable.el.insertBefore(extended.item, null)
           setItems(state => replace(state, extended.oldDraggableIndex!, extended.swapStateItem))
           swapping = false
         }, delay)
       } else if (isMultiDrag(extended)) {
         multiDragUpdate = null
-        extended.oldIndicies.forEach(el => node.insertBefore(el.multiDragElement, null))
+        extended.oldIndicies.forEach(el => sortable.el.insertBefore(el.multiDragElement, null))
         extended.oldIndicies.forEach(el => (Sortable.utils as MultiDragUtils).deselect(el.multiDragElement))
         setItems(state => removeAll(state, extended.oldIndicies.map(el => el.index)))
       } else if (!isClone(extended)) {
-        node.insertBefore(extended.item, null)
+        sortable.el.insertBefore(extended.item, null)
         setItems(state => remove(state, extended.oldDraggableIndex!))
       }
     }
 
-    extendedOpts.onMove = (e, originalEvent) => {
+    const onMove = (e: MoveEvent, originalEvent: Event) => {
       const extended = e as MoveEventExtended<T>
       const currentItem = itemRefs.current.getValue(e.dragged)
       if (!currentItem || swapping) {
@@ -141,7 +141,7 @@ export const useSortable = <T>(
       return options?.onMove?.(extended, originalEvent)
     }
 
-    extendedOpts.onEnd = e => {
+    const onEnd = (e: SortableEvent) => {
       const extended = extendSortableEvent(e)
       opts?.onEnd?.(extended)
       if (multiDragUpdate) {
@@ -150,13 +150,22 @@ export const useSortable = <T>(
       }
     }
 
-    return extendedOpts
+    for (let event of simpleEvents) {
+      // @ts-ignore
+      sortable.option(event, (e: SortableEvent) => opts?.[event]?.(extendSortableEvent(e)))
+    }
+    sortable.option('onAdd', onAdd)
+    sortable.option('onRemove', onRemove)
+    sortable.option('onUpdate', onUpdate)
+    sortable.option('onMove', onMove)
+    sortable.option('onEnd', onEnd)
   }
 
   const refCallback = useCallback((node) => {
     if (node) {
       registerSortable(node, itemRefs.current)
-      sortableRef.current = Sortable.create(node, extendOptions(node, options as SortableOptions))
+      sortableRef.current = Sortable.create(node, options as SortableOptions)
+      extendEvents(sortableRef.current, options as SortableOptions)
     } else {
       unregisterSortable(sortableRef.current!.el)
       sortableRef.current!.destroy()

@@ -11,6 +11,7 @@ import {SortableProvider} from 'use-sortablejs';
 import SwapList from '@examples/SwapList';
 import Sortable, {MultiDrag, Swap} from 'sortablejs';
 import MultiDragList from '@examples/MultiDragList';
+import ConfigurableList from "@examples/ConfigurableList";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <NestedList/>
         <SwapList/>
         <MultiDragList/>
+        <ConfigurableList/>
         <footer className='footer'>
           <p>Source code on: <a href='https://github.com/harrel56/use-sortablejs'>GitHub</a>, <a href='https://gitlab.com/org.harrel/use-sortablejs'>GitLab</a></p>
         </footer>
