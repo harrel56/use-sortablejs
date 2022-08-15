@@ -20,7 +20,7 @@ const ConfigurableList = () => {
       <h2>Configurable list</h2>
       <textarea value={optionsString} onChange={(e) => setOptionsString(e.target.value)}/>
       <button className='button-small' onClick={() => setOptions(JSON.parse(optionsString))}>Apply options</button>
-      <div id='simple-list' {...getRootProps()}>
+      <div id='configurable-list' {...getRootProps()}>
         {items.map(item => <div className='item' key={item} {...getItemProps(item)}>{item}</div>)}
       </div>
       <CodeSnippet code={snippet}/>
@@ -49,7 +49,7 @@ const snippet =
       <h2>Configurable list</h2>
       <textarea value={optionsString} onChange={(e) => setOptionsString(e.target.value)}/>
       <button className='button-small' onClick={() => setOptions(JSON.parse(optionsString))}>Apply options</button>
-      <div id='simple-list' {...getRootProps()}>
+      <div id='configurable-list' {...getRootProps()}>
         {items.map(item => <div className='item' key={item} {...getItemProps(item)}>{item}</div>)}
       </div>
     </div>
