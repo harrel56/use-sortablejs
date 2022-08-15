@@ -1,6 +1,14 @@
-import {Dispatch, RefCallback, SetStateAction, useCallback, useContext, useEffect, useRef} from 'react';
+import {MutableRefObject, RefCallback, useCallback, useContext, useEffect, useRef} from 'react';
 import Sortable, {MoveEvent, SortableEvent, SortableOptions} from 'sortablejs';
-import {ExtendedOptions, ItemProps, MoveEventExtended, MultiDragUtils, RootProps, SortableEventExtended} from './types';
+import {
+  ExtendedOptions,
+  ItemProps,
+  MoveEventExtended,
+  MultiDragUtils,
+  RootProps,
+  SortableEventExtended,
+  UseSortableProps
+} from './types';
 import {SortableContext} from './SortableProvider';
 import {BiDiMap, insert, moveItem, moveItems, remove, removeAll, replace, shallowClone, swap} from './utils';
 
@@ -17,10 +25,12 @@ const getEvents = (options: any) => {
   return res
 }
 
-export const useSortable = <T>(
-  setItems: Dispatch<SetStateAction<T[]>>,
-  options: ExtendedOptions<T> = {},
-  cloneItem: (item: T) => T = shallowClone) => {
+export const useSortable = <T>({
+                                 setItems,
+                                 options = {},
+                                 cloneItem = shallowClone,
+                                 sortableRef: userSortableRef
+                               }: UseSortableProps<T>) => {
 
   const sortableCtx = useContext(SortableContext)
   if (!sortableCtx) {
@@ -41,7 +51,18 @@ export const useSortable = <T>(
       .forEach(el => sortableRef.current!.option(el[0] as keyof ExtendedOptions<any>, el[1]))
     Object.entries(options).forEach(el => sortableRef.current!.option(el[0] as keyof ExtendedOptions<any>, el[1]))
     extendEvents(sortableRef.current, options as SortableOptions)
+    setUserSortableRef(sortableRef.current)
   }, [sortableRef.current, JSON.stringify(options, jsonReplacer), ...getEvents(options)])
+
+  const setUserSortableRef = (sortable: Sortable | null) => {
+    if (userSortableRef) {
+      if (typeof userSortableRef === 'function') {
+        userSortableRef(sortable)
+      } else {
+        (userSortableRef as MutableRefObject<Sortable | null>).current = sortable
+      }
+    }
+  }
 
   const extendSortableEvent = (e: SortableEvent) => {
     const extended = e as SortableEventExtended<T>
@@ -174,6 +195,7 @@ export const useSortable = <T>(
       unregisterSortable(sortableRef.current!.el)
       sortableRef.current!.destroy()
       sortableRef.current = null;
+      setUserSortableRef(null)
     }
   }, []) as RefCallback<HTMLElement>
 

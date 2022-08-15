@@ -1,6 +1,6 @@
-import {Dispatch, SetStateAction, useState} from 'react';
-import {useSortable, ItemProps} from 'use-sortablejs';
-import CodeSnippet from '@examples/CodeSnippet';
+import {Dispatch, SetStateAction, useState} from 'react'
+import {ItemProps, useSortable} from 'use-sortablejs'
+import CodeSnippet from '@examples/CodeSnippet'
 
 interface Item {
   title: string
@@ -29,9 +29,11 @@ const List = ({itemsState}: ListProps) => {
     setItems(newItems)
     return newItems
   }) as Dispatch<SetStateAction<Item[]>>
-  const {getRootProps, getItemProps} = useSortable(setItemsInternal, {
-    animation: 150,
-    group: 'shared'
+  const {getRootProps, getItemProps} = useSortable({
+    setItems: setItemsInternal, options: {
+      animation: 150,
+      group: 'shared'
+    }
   })
   return (
     <div {...getRootProps()}>
@@ -72,9 +74,11 @@ const NestedList = () => {
     },
     {title: 'Item 5', children: []}
   ])
-  const {getRootProps, getItemProps} = useSortable(setItems, {
-    animation: 150,
-    group: 'shared'
+  const {getRootProps, getItemProps} = useSortable({
+    setItems, options: {
+      animation: 150,
+      group: 'shared'
+    }
   })
 
   return (
@@ -85,10 +89,10 @@ const NestedList = () => {
       </div>
       <CodeSnippet code={snippet}/>
     </div>
-  );
+  )
 }
 
-export default NestedList;
+export default NestedList
 
 const snippet =
 `interface Item {
@@ -118,9 +122,11 @@ const List = ({itemsState}: ListProps) => {
     setItems(newItems)
     return newItems
   }) as Dispatch<SetStateAction<Item[]>>
-  const {getRootProps, getItemProps} = useSortable(setItemsInternal, {
-    animation: 150,
-    group: 'shared'
+  const {getRootProps, getItemProps} = useSortable({
+    setItems: setItemsInternal, options: {
+      animation: 150,
+      group: 'shared'
+    }
   })
   return (
     <div {...getRootProps()}>
@@ -161,9 +167,11 @@ const NestedList = () => {
     },
     {title: 'Item 5', children: []}
   ])
-  const {getRootProps, getItemProps} = useSortable(setItems, {
-    animation: 150,
-    group: 'shared'
+  const {getRootProps, getItemProps} = useSortable({
+    setItems, options: {
+      animation: 150,
+      group: 'shared'
+    }
   })
 
   return (

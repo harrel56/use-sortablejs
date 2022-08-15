@@ -77,7 +77,7 @@ const List = () => {
     'Item 4',
     'Item 5'
   ])
-  const {getRootProps, getItemProps} = useSortable(setItems, {animation: 150})
+  const {getRootProps, getItemProps} = useSortable({setItems, options: {animation: 150}})
   return (
     <div {...getRootProps()}>
       {items.map(item => <div key={item} {...getItemProps(item)}>{item}</div>)}
@@ -91,10 +91,11 @@ Where item type can be possibly anything (primitive, object of any shape, functi
 
 All types definitions can be found in this [file](https://github.com/harrel56/use-sortablejs/blob/master/main/src/types.ts).
 
-`useSortable` takes 3 parameters:
+`useSortable` takes `UseSortableProps` parameter, which is an object containing:
 1. `setItems`: `Dispatch<SetStateAction<T[]>>`, where `T` is your item type. In most cases this should be a `setState` function returned from React `useState` hook.
 2. `options`: `ExtendedOptions<T>`, options object which you would normally pass to `Sortable.create()`.
 3. *(optional)* `cloneItem`: `(item: T) => T`, clone function to perform when item is being cloned. Defaults to internal shallow clone function.
+4. *(optional)* `sortableRef`: `Ref<Sortable>`, ref object or ref callback, which will be set/called with created `Sortable` object - set to `null` on dismount.
 
 Additionally, all event functions that you pass to `options` object will have access to extended event object (`SortableEventExtended<T>`),
 which contains additional field `stateItem`, which corresponds to dragged item state and is directly mapped from `item` field.

@@ -1,6 +1,6 @@
-import {useState} from 'react';
-import {useSortable} from 'use-sortablejs';
-import CodeSnippet from '@examples/CodeSnippet';
+import {useState} from 'react'
+import {useSortable} from 'use-sortablejs'
+import CodeSnippet from '@examples/CodeSnippet'
 
 const FilterList = () => {
   const [items, setItems] = useState([
@@ -12,9 +12,11 @@ const FilterList = () => {
     {name: 'Item 5'},
     {name: 'Item 6'}
   ])
-  const {getRootProps, getItemProps} = useSortable(setItems, {
-    animation: 150,
-    filter: '.filtered'
+  const {getRootProps, getItemProps} = useSortable({
+    setItems, options: {
+      animation: 150,
+      filter: '.filtered'
+    }
   })
   return (
     <div className='example-container'>
@@ -43,9 +45,11 @@ const snippet =
     {name: 'Item 5'},
     {name: 'Item 6'}
   ])
-  const {getRootProps, getItemProps} = useSortable(setItems, {
-    animation: 150,
-    filter: '.filtered'
+  const {getRootProps, getItemProps} = useSortable({
+    setItems, options: {
+      animation: 150,
+      filter: '.filtered'
+    }
   })
   return (
     <div id='filter-list' {...getRootProps()}>

@@ -1,6 +1,6 @@
-import {useState} from 'react';
-import {useSortable} from 'use-sortablejs';
-import CodeSnippet from '@examples/CodeSnippet';
+import {useState} from 'react'
+import {useSortable} from 'use-sortablejs'
+import CodeSnippet from '@examples/CodeSnippet'
 
 const SharedList = () => {
   const [items, setItems] = useState([
@@ -15,15 +15,12 @@ const SharedList = () => {
     'Item 7',
     'Item 8'
   ])
-
-  const {getRootProps, getItemProps} = useSortable(setItems, {
+  const options = {
     animation: 150,
     group: 'shared'
-  })
-  const {getRootProps: getRootProps2, getItemProps: getItemProps2} = useSortable(setItems2, {
-    animation: 150,
-    group: 'shared'
-  })
+  }
+  const {getRootProps, getItemProps} = useSortable({setItems, options})
+  const {getRootProps: getRootProps2, getItemProps: getItemProps2} = useSortable({setItems: setItems2, options})
 
   return (
     <div className='example-container'>
@@ -38,10 +35,10 @@ const SharedList = () => {
       </div>
       <CodeSnippet code={snippet}/>
     </div>
-  );
+  )
 }
 
-export default SharedList;
+export default SharedList
 
 const snippet =
 `const SharedList = () => {
@@ -57,15 +54,12 @@ const snippet =
     'Item 7',
     'Item 8'
   ])
-
-  const {getRootProps, getItemProps} = useSortable(setItems, {
+  const options = {
     animation: 150,
     group: 'shared'
-  })
-  const {getRootProps: getRootProps2, getItemProps: getItemProps2} = useSortable(setItems2, {
-    animation: 150,
-    group: 'shared'
-  })
+  }
+  const {getRootProps, getItemProps} = useSortable({setItems, options})
+  const {getRootProps: getRootProps2, getItemProps: getItemProps2} = useSortable({setItems: setItems2, options})
 
   return (
     <div className='example'>

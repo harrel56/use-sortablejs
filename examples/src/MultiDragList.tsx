@@ -1,6 +1,6 @@
-import {useState} from 'react';
-import {useSortable} from 'use-sortablejs';
-import CodeSnippet from '@examples/CodeSnippet';
+import {useState} from 'react'
+import {useSortable} from 'use-sortablejs'
+import CodeSnippet from '@examples/CodeSnippet'
 
 const MultiDragList = () => {
   const [items, setItems] = useState([
@@ -15,20 +15,15 @@ const MultiDragList = () => {
     'Item 7',
     'Item 8'
   ])
-  const {getRootProps, getItemProps} = useSortable(setItems, {
+  const options = {
     animation: 150,
     group: 'multidrag',
     multiDrag: true,
     selectedClass: 'multi-drag',
     fallbackTolerance: 3
-  })
-  const {getRootProps: getRootProps2, getItemProps: getItemProps2} = useSortable(setItems2, {
-    animation: 150,
-    group: 'multidrag',
-    multiDrag: true,
-    selectedClass: 'multi-drag',
-    fallbackTolerance: 3
-  })
+  }
+  const {getRootProps, getItemProps} = useSortable({setItems, options})
+  const {getRootProps: getRootProps2, getItemProps: getItemProps2} = useSortable({setItems: setItems2, options})
   return (
     <div className='example-container'>
       <h2>Multi drag list</h2>
@@ -61,20 +56,15 @@ const snippet =
     'Item 7',
     'Item 8'
   ])
-  const {getRootProps, getItemProps} = useSortable(setItems, {
+  const options = {
     animation: 150,
     group: 'multidrag',
     multiDrag: true,
     selectedClass: 'multi-drag',
     fallbackTolerance: 3
-  })
-  const {getRootProps: getRootProps2, getItemProps: getItemProps2} = useSortable(setItems2, {
-    animation: 150,
-    group: 'multidrag',
-    multiDrag: true,
-    selectedClass: 'multi-drag',
-    fallbackTolerance: 3
-  })
+  }
+  const {getRootProps, getItemProps} = useSortable({setItems, options})
+  const {getRootProps: getRootProps2, getItemProps: getItemProps2} = useSortable({setItems: setItems2, options})
   return (
     <div className='example'>
       <div id='multi-drag-list1' {...getRootProps()}>

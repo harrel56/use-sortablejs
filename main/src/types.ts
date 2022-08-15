@@ -1,5 +1,12 @@
-import {RefCallback} from 'react';
-import {MoveEvent, SortableEvent, Utils, Options} from 'sortablejs';
+import {Dispatch, Ref, RefCallback, SetStateAction} from 'react';
+import Sortable, {MoveEvent, SortableEvent, Utils, Options} from 'sortablejs';
+
+export interface UseSortableProps<T> {
+  setItems: Dispatch<SetStateAction<T[]>>
+  options?: ExtendedOptions<T>
+  cloneItem?: (item: T) => T
+  sortableRef?: Ref<Sortable>
+}
 
 export interface RootProps {
   ref: RefCallback<HTMLElement>

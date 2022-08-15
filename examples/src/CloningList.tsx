@@ -1,6 +1,6 @@
-import {useRef, useState} from 'react';
-import {useSortable} from 'use-sortablejs';
-import CodeSnippet from '@examples/CodeSnippet';
+import {useRef, useState} from 'react'
+import {useSortable} from 'use-sortablejs'
+import CodeSnippet from '@examples/CodeSnippet'
 
 const CloningList = () => {
   const idx = useRef(0)
@@ -18,20 +18,24 @@ const CloningList = () => {
   ])
   const cloneItem = (item: typeof items[0]) => ({...item, id: ++idx.current})
 
-  const {getRootProps, getItemProps} = useSortable(setItems, {
-    animation: 150,
-    group: {
-      name: 'cloning',
-      pull: 'clone'
+  const {getRootProps, getItemProps} = useSortable({
+    setItems, cloneItem, options: {
+      animation: 150,
+      group: {
+        name: 'cloning',
+        pull: 'clone'
+      }
     }
-  }, cloneItem)
-  const {getRootProps: getRootProps2, getItemProps: getItemProps2} = useSortable(setItems2, {
-    animation: 150,
-    group: {
-      name: 'cloning',
-      pull: 'clone'
+  })
+  const {getRootProps: getRootProps2, getItemProps: getItemProps2} = useSortable({
+    setItems: setItems2, cloneItem, options: {
+      animation: 150,
+      group: {
+        name: 'cloning',
+        pull: 'clone'
+      }
     }
-  }, cloneItem)
+  })
 
   return (
     <div className='example-container'>
@@ -46,10 +50,10 @@ const CloningList = () => {
       </div>
       <CodeSnippet code={snippet}/>
     </div>
-  );
+  )
 }
 
-export default CloningList;
+export default CloningList
 
 const snippet =
 `const CloningList = () => {
@@ -68,20 +72,24 @@ const snippet =
   ])
   const cloneItem = (item: typeof items[0]) => ({...item, id: ++idx.current})
 
-  const {getRootProps, getItemProps} = useSortable(setItems, {
-    animation: 150,
-    group: {
-      name: 'cloning',
-      pull: 'clone'
+  const {getRootProps, getItemProps} = useSortable({
+    setItems, cloneItem, options: {
+      animation: 150,
+      group: {
+        name: 'cloning',
+        pull: 'clone'
+      }
     }
-  }, cloneItem)
-  const {getRootProps: getRootProps2, getItemProps: getItemProps2} = useSortable(setItems2, {
-    animation: 150,
-    group: {
-      name: 'cloning',
-      pull: 'clone'
+  })
+  const {getRootProps: getRootProps2, getItemProps: getItemProps2} = useSortable({
+    setItems: setItems2, cloneItem, options: {
+      animation: 150,
+      group: {
+        name: 'cloning',
+        pull: 'clone'
+      }
     }
-  }, cloneItem)
+  })
 
   return (
     <div className='example'>

@@ -1,6 +1,6 @@
-import {useState} from 'react';
-import {useSortable} from 'use-sortablejs';
-import CodeSnippet from '@examples/CodeSnippet';
+import {useState} from 'react'
+import {useSortable} from 'use-sortablejs'
+import CodeSnippet from '@examples/CodeSnippet'
 
 const SimpleList = () => {
   const [items, setItems] = useState([
@@ -10,7 +10,7 @@ const SimpleList = () => {
     'Item 4',
     'Item 5'
   ])
-  const {getRootProps, getItemProps} = useSortable(setItems, {animation: 150})
+  const {getRootProps, getItemProps} = useSortable({setItems, options: {animation: 150}})
   return (
     <div className='example-container'>
       <h2>Simple list</h2>
@@ -33,7 +33,7 @@ const snippet =
     'Item 4',
     'Item 5'
   ])
-  const {getRootProps, getItemProps} = useSortable(setItems, {animation: 150})
+  const {getRootProps, getItemProps} = useSortable({setItems, options: {animation: 150}})
   return (
     <div id='simple-list' {...getRootProps()}>
       {items.map(item => <div className='item' key={item} {...getItemProps(item)}>{item}</div>)}

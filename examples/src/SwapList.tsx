@@ -1,6 +1,6 @@
-import {useState} from 'react';
-import {useSortable} from 'use-sortablejs';
-import CodeSnippet from '@examples/CodeSnippet';
+import {useState} from 'react'
+import {useSortable} from 'use-sortablejs'
+import CodeSnippet from '@examples/CodeSnippet'
 
 const SwapList = () => {
   const [items, setItems] = useState([
@@ -15,18 +15,14 @@ const SwapList = () => {
     'Item 7',
     'Item 8'
   ])
-  const {getRootProps, getItemProps} = useSortable(setItems, {
+  const options = {
     animation: 150,
     group: 'swap',
     swap: true,
     swapClass: 'swap'
-  })
-  const {getRootProps: getRootProps2, getItemProps: getItemProps2} = useSortable(setItems2, {
-    animation: 150,
-    group: 'swap',
-    swap: true,
-    swapClass: 'swap'
-  })
+  }
+  const {getRootProps, getItemProps} = useSortable({setItems, options})
+  const {getRootProps: getRootProps2, getItemProps: getItemProps2} = useSortable({setItems: setItems2, options})
   return (
     <div className='example-container'>
       <h2>Swap list</h2>
@@ -59,18 +55,14 @@ const snippet =
     'Item 7',
     'Item 8'
   ])
-  const {getRootProps, getItemProps} = useSortable(setItems, {
+  const options = {
     animation: 150,
     group: 'swap',
     swap: true,
     swapClass: 'swap'
-  })
-  const {getRootProps: getRootProps2, getItemProps: getItemProps2} = useSortable(setItems2, {
-    animation: 150,
-    group: 'swap',
-    swap: true,
-    swapClass: 'swap'
-  })
+  }
+  const {getRootProps, getItemProps} = useSortable({setItems, options})
+  const {getRootProps: getRootProps2, getItemProps: getItemProps2} = useSortable({setItems: setItems2, options})
   return (
     <div className='example'>
       <div id='swap-list1' {...getRootProps()}>
