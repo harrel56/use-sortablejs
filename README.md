@@ -95,10 +95,25 @@ All types definitions can be found in this [file](https://github.com/harrel56/us
 1. `setItems`: `Dispatch<SetStateAction<T[]>>`, where `T` is your item type. In most cases this should be a `setState` function returned from React `useState` hook.
 2. `options`: `ExtendedOptions<T>`, options object which you would normally pass to `Sortable.create()`.
 3. *(optional)* `cloneItem`: `(item: T) => T`, clone function to perform when item is being cloned. Defaults to internal shallow clone function.
-4. *(optional)* `sortableRef`: `Ref<Sortable>`, ref object or ref callback, which will be set/called with created `Sortable` object - set to `null` on dismount.
+4. *(optional)* `sortableRef`: `LegacyRef<Sortable>`, ref object or ref callback, which will be set/called with created `Sortable` object - set to `null` on dismount.
 
 Additionally, all event functions that you pass to `options` object will have access to extended event object (`SortableEventExtended<T>`),
 which contains additional field `stateItem`, which corresponds to dragged item state and is directly mapped from `item` field.
+
+### Using `sortableRef`
+
+Leveraging `options` reactivity is the preferred way of achieving dynamic changes to `Sortable` object, but if you need more control `sortableRef` is the way to go.
+
+```ts
+const myRef = useRef<Sortable>(null)
+const {getRootProps, getItemProps} = useSortable({setItems, sortableRef: myRef})
+```
+```ts
+const myCallbackRef = (sortable: Sortable | null) => {
+  sortable?.option('sort', false)
+}
+const {getRootProps, getItemProps} = useSortable({setItems, sortableRef: myCallbackRef})
+```
 
 ## Constraints
 

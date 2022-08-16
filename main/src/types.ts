@@ -1,11 +1,11 @@
-import {Dispatch, Ref, RefCallback, SetStateAction} from 'react';
-import Sortable, {MoveEvent, SortableEvent, Utils, Options} from 'sortablejs';
+import {Dispatch, LegacyRef, RefCallback, SetStateAction} from 'react'
+import Sortable, {MoveEvent, Options, SortableEvent, Utils} from 'sortablejs'
 
 export interface UseSortableProps<T> {
   setItems: Dispatch<SetStateAction<T[]>>
   options?: ExtendedOptions<T>
   cloneItem?: (item: T) => T
-  sortableRef?: Ref<Sortable>
+  sortableRef?: LegacyRef<Sortable>
 }
 
 export interface RootProps {

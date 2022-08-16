@@ -1,5 +1,5 @@
 import {MutableRefObject, RefCallback, useCallback, useContext, useEffect, useRef, useState} from 'react'
-import Sortable, {MoveEvent, SortableEvent, SortableOptions} from 'sortablejs';
+import Sortable, {MoveEvent, SortableEvent, SortableOptions} from 'sortablejs'
 import {
   ExtendedOptions,
   ItemProps,
@@ -8,9 +8,9 @@ import {
   RootProps,
   SortableEventExtended,
   UseSortableProps
-} from './types';
-import {SortableContext} from './SortableProvider';
-import {BiDiMap, insert, moveItem, moveItems, remove, removeAll, replace, shallowClone, swap} from './utils';
+} from './types'
+import {SortableContext} from './SortableProvider'
+import {BiDiMap, insert, moveItem, moveItems, remove, removeAll, replace, shallowClone, swap} from './utils'
 
 const isClone = (e: SortableEvent): boolean => e.pullMode === 'clone'
 const isSwap = (e: SortableEvent): boolean => !!e.swapItem
@@ -53,8 +53,9 @@ export const useSortable = <T>({
       .forEach(el => sortable.option(el[0] as keyof ExtendedOptions<any>, el[1]))
     Object.entries(options).forEach(el => sortable.option(el[0] as keyof ExtendedOptions<any>, el[1]))
     extendEvents(sortable, options as SortableOptions)
-    setUserSortableRef(sortable)
   }, [sortable, JSON.stringify(options, jsonReplacer), ...getEvents(options)])
+
+  useEffect(() => {sortable && setUserSortableRef(sortable)}, [sortable])
 
   const setUserSortableRef = (newSortable: Sortable | null) => {
     if (userSortableRef) {
@@ -194,9 +195,9 @@ export const useSortable = <T>({
       const newSortable = Sortable.create(node, {multiDragKey: ''})
       defaultOptions.current = {...newSortable.options}
       setSortable(newSortable)
-    } else {
-      unregisterSortable(sortableRef.current!.el)
-      sortableRef.current!.destroy()
+    } else if (sortableRef.current) {
+      unregisterSortable(sortableRef.current.el)
+      sortableRef.current.destroy()
       setSortable(null)
       setUserSortableRef(null)
     }
