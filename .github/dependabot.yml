@@ -2,9 +2,11 @@ version: 2
 updates:
   - package-ecosystem: npm
     directory: /main
+    open-pull-requests-limit: 40
     schedule:
       interval: weekly
   - package-ecosystem: npm
     directory: /examples
+    open-pull-requests-limit: 40
     schedule:
       interval: weekly
