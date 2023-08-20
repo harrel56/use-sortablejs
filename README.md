@@ -10,7 +10,7 @@ Demo: https://harrel56.github.io/use-sortablejs
 [![license](https://badgen.net/npm/license/use-sortablejs)](https://github.com/harrel56/use-sortablejs/blob/master/LICENSE)
 [![types](https://badgen.net/npm/types/use-sortablejs)](https://www.npmjs.com/package/use-sortablejs)
 [![minified size](https://badgen.net/bundlephobia/min/use-sortablejs)](https://bundlephobia.com/package/use-sortablejs)
-[![minzip size](https://badgen.net/bundlephobia/minzip/use-sortablejs)](https://bundlephobia.com/package/use-sortablejs)
+[![minzip size](https://badgen.net/bundlephobia/minzip/use-sortablejs](https://bundlephobia.com/package/use-sortablejs)
 
 Created to serve as a refreshed alternative to [react-sortablejs](https://github.com/SortableJS/react-sortablejs),
 with hook design inspired by [@mui/base](https://www.npmjs.com/package/@mui/base).
