@@ -30,7 +30,7 @@ jobs:
         working-directory: ./examples
       - run: npm run build:release
         working-directory: ./examples
-      - run: npx playwright install --with-deps
+      - run: npx playwright install --with-deps chromium
         working-directory: ./examples
       - run: npm run test
         working-directory: ./examples
