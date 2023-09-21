@@ -30,8 +30,6 @@ jobs:
         working-directory: ./examples
       - run: npm run build:release
         working-directory: ./examples
-      - run: npx playwright install --with-deps chromium
-        working-directory: ./examples
       - run: npm run test
         working-directory: ./examples
       - name: Setup Pages
@@ -70,8 +68,6 @@ jobs:
       - run: npm i
         working-directory: ./examples
       - run: npm run build:next
-        working-directory: ./examples
-      - run: npx playwright install --with-deps chromium
         working-directory: ./examples
       - run: npm run test
         working-directory: ./examples
