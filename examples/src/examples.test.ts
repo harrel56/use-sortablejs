@@ -245,7 +245,7 @@ describe('Examples test', () => {
   });
 
   it('multi drag list', async () => {
-    const STEPS = 80 // looks like multidrag struggles without intermediate mousemove events
+    const STEPS = 160 // looks like multidrag struggles without intermediate mousemove events
     await page.waitForSelector('#multi-drag-list1');
     await page.waitForSelector('#multi-drag-list2');
 
