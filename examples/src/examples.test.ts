@@ -1,6 +1,5 @@
 import * as path from 'path';
-import {chromium, ElementHandle} from 'playwright';
-import {Browser, BrowserContext, Page} from 'playwright-core';
+import {Browser, BrowserContext, chromium, ElementHandle, Page} from 'playwright'
 
 const ANIMATION_DURATION = 150
 
