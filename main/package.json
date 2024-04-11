@@ -5,6 +5,9 @@
   "source": "src/index.ts",
   "main": "build/index.js",
   "types": "build/index.d.ts",
+  "files": [
+    "/build"
+  ],
   "sideEffects": false,
   "license": "MIT",
   "author": "https://github.com/harrel56",
@@ -16,9 +19,8 @@
     "directory": "main"
   },
   "scripts": {
-    "build": "parcel build && npm run distribute",
-    "distribute": "node distribute.js",
-    "publish": "npm run build && cd build && npm publish"
+    "build": "bun run build.js --bun",
+    "publish": "npm publish"
   },
   "peerDependencies": {
     "react": "^17.0.0 || ^18.0.0",
@@ -27,10 +29,9 @@
     "@types/sortablejs": "^1.0.0"
   },
   "devDependencies": {
-    "@parcel/packager-ts": "2.12.0",
-    "@parcel/transformer-typescript-types": "2.12.0",
-    "parcel": "2.12.0",
-    "typescript": "5.4.4"
+    "bun-plugin-dts": "0.2.1",
+    "typescript": "5.4.4",
+    "@types/bun": "1.0.12"
   },
   "keywords": [
     "react",
