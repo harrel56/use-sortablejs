@@ -7,7 +7,6 @@ describe('Examples test', () => {
   let browser: Browser;
   let ctx: BrowserContext;
   let page: Page;
-  jest.setTimeout(5_000)
 
   const expectSorted = async (items: ElementHandle<HTMLElement | SVGElement>[], expected: string[]) => {
     const currentPromise = items.map(item => item.textContent())
