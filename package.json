@@ -19,7 +19,7 @@
     "directory": "main"
   },
   "scripts": {
-    "build": "bun run build.js --bun"
+    "build": "bun run build.ts --bun"
   },
   "peerDependencies": {
     "react": "^17.0.0 || ^18.0.0",

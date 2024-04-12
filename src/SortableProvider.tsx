@@ -1,4 +1,5 @@
 import {Context, createContext, PropsWithChildren, useRef} from 'react';
+import {jsx} from "react/jsx-runtime";
 import {BiDiMap} from './utils';
 
 interface ContextContent {
@@ -25,9 +26,8 @@ export const SortableProvider = (({children}: PropsWithChildren) => {
     return sortables.current.get(sortable)!.getValue(item) as T
   }
 
-  return (
-    <SortableContext.Provider value={{registerSortable, unregisterSortable, findItem}}>
-      {children}
-    </SortableContext.Provider>
-  )
+  return jsx(SortableContext.Provider, {
+    value: { registerSortable, unregisterSortable, findItem },
+    children
+  })
 })
