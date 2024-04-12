@@ -1,0 +1,26 @@
+name: release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: 1.1.3
+      - run: bun install --frozen-lockfile
+        working-directory: ./main
+      - run: bun run build
+        working-directory: ./main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+      - run: npm publish
+        with:
+          working-directory: ./main
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
