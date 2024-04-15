@@ -89,7 +89,7 @@ Where item type can be possibly anything (primitive, object of any shape, functi
 
 ## Details
 
-All types definitions can be found in this [file](https://github.com/harrel56/use-sortablejs/blob/master/main/src/types.ts).
+All types definitions can be found in this [file](https://github.com/harrel56/use-sortablejs/blob/master/src/types.ts).
 
 `useSortable` takes `UseSortableProps` parameter, which is an object containing:
 1. `setItems`: `Dispatch<SetStateAction<T[]>>`, where `T` is your item type. In most cases this should be a `setState` function returned from React `useState` hook.

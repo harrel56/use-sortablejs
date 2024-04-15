@@ -9,4 +9,4 @@ const tsConfigJson = JSON.parse(fs.readFileSync('./tsconfig.json', {encoding: 'u
 tsConfigJson.compilerOptions.paths['use-sortablejs'] = ['lib/index.ts']
 fs.writeFileSync('./tsconfig.json', JSON.stringify(tsConfigJson, null, 2))
 
-copyFolderSync('../main/src', './lib')
+copyFolderSync('../src', './lib')
