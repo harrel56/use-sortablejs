@@ -7,7 +7,7 @@
     "build:release": "webpack && npm run distribute",
     "build:next": "webpack --config webpack.next.config.js && npm run distribute",
     "distribute": "node scripts/distribute.mjs",
-    "test": "bun test --timeout 5000"
+    "test": "jest"
   },
   "dependencies": {
     "prismjs": "1.29.0",
@@ -19,11 +19,12 @@
   "devDependencies": {
     "@babel/preset-env": "7.24.3",
     "@babel/preset-typescript": "7.24.1",
-    "@types/bun": "1.0.12",
+    "@types/jest": "29.5.12",
     "@types/react": "18.2.75",
     "@types/react-dom": "18.2.24",
     "@types/sortablejs": "1.15.8",
     "@types/prismjs": "1.26.3",
+    "jest": "29.7.0",
     "playwright": "1.42.1",
     "playwright-core": "1.43.0",
     "@playwright/browser-chromium": "1.43.0",
