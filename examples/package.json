@@ -13,7 +13,7 @@
   "dependencies": {
     "prismjs": "1.29.0",
     "react": "18.3.1",
-    "react-dom": "18.2.0",
+    "react-dom": "18.3.1",
     "sortablejs": "1.15.2",
     "use-sortablejs": "*"
   },
@@ -22,7 +22,7 @@
     "@babel/preset-typescript": "7.24.1",
     "@types/jest": "29.5.12",
     "@types/react": "18.3.1",
-    "@types/react-dom": "18.2.25",
+    "@types/react-dom": "18.3.0",
     "@types/sortablejs": "1.15.8",
     "@types/prismjs": "1.26.3",
     "jest": "29.7.0",
