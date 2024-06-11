@@ -9,6 +9,8 @@ updates:
           - '*'
     schedule:
       interval: weekly
+    ignore:
+      - dependency-name: "bun-plugin-dts" #seems broken after 0.2.1
   - package-ecosystem: npm
     directory: /examples
     open-pull-requests-limit: 40
