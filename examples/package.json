@@ -30,8 +30,8 @@
     "playwright-core": "1.44.1",
     "@playwright/browser-chromium": "1.44.1",
     "ts-loader": "9.5.1",
-    "typescript": "5.4.5",
-    "webpack": "5.92.0",
+    "typescript": "5.5.2",
+    "webpack": "5.92.1",
     "webpack-cli": "5.1.4"
   }
 }
