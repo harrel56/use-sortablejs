@@ -13,8 +13,8 @@ import {SortableContext} from './SortableProvider'
 import {BiDiMap, insert, moveItem, moveItems, remove, removeAll, replace, shallowClone, swap} from './utils'
 
 const isClone = (e: SortableEvent): boolean => e.pullMode === 'clone'
-const isSwap = (e: SortableEvent): boolean => !!e.swapItem
-const isMultiDrag = (e: SortableEvent): boolean => e.newIndicies.length > 0
+const isSwap = (e: SortableEvent): boolean => Boolean(e.swapItem)
+const isMultiDrag = (e: SortableEvent): boolean => Boolean(e.newIndicies?.length)
 
 const simpleEvents: (keyof ExtendedOptions<any>)[] = ['onStart', 'onClone', 'onChoose', 'onUnchoose', 'onSort', 'onFilter', 'onChange']
 const allEvents: Set<string> = new Set([...simpleEvents, 'onAdd', 'onRemove', 'onUpdate', 'onMove', 'onEnd'] as (keyof ExtendedOptions<any>)[])
@@ -70,7 +70,9 @@ export const useSortable = <T>({
   const extendSortableEvent = (e: SortableEvent) => {
     const extended = e as SortableEventExtended<T>
     extended.stateItem = findItem(e.from, e.item)
-    extended.stateItems = e.newIndicies.map(el => findItem(e.from, el.multiDragElement))
+    if (isMultiDrag(e)) {
+      extended.stateItems = e.newIndicies.map(el => findItem(e.from, el.multiDragElement))
+    }
     if (isSwap(e)) {
       extended.swapStateItem = findItem(e.to, e.swapItem!)
     }
@@ -109,7 +111,7 @@ export const useSortable = <T>({
       } else if (isMultiDrag(extended)) {
         extended.newIndicies.forEach(el => el.multiDragElement.remove())
         const minIdx = Math.min(...extended.newIndicies.map(el => el.index))
-        setItems(state => insert(state, minIdx, ...extended.stateItems))
+        setItems(state => insert(state, minIdx, ...extended.stateItems!))
       } else {
         extended.item.remove()
         setItems(state => insert(state, extended.newDraggableIndex!, extended.stateItem))
@@ -143,7 +145,7 @@ export const useSortable = <T>({
         swapping = true
         setTimeout(() => {
           newSortable.el.insertBefore(extended.item, null)
-          setItems(state => replace(state, extended.oldDraggableIndex!, extended.swapStateItem))
+          setItems(state => replace(state, extended.oldDraggableIndex!, extended.swapStateItem!))
           swapping = false
         }, delay)
       } else if (isMultiDrag(extended)) {
