@@ -76,11 +76,11 @@ export interface ExtendedOptions<T> extends Omit<Options, methods> {
 
 export interface SortableEventExtended<T> extends SortableEvent {
   stateItem: T
-  swapStateItem: T // only if swap, otherwise undefined
-  stateItems: T[] // only if multidrag, otherwise empty
+  swapStateItem?: T // only if swap, otherwise undefined
+  stateItems?: T[] // only if multidrag, otherwise undefined
 }
 
 export interface MoveEventExtended<T> extends MoveEvent {
   stateItem: T
-  stateItems: T[] // only if multidrag, otherwise empty
+  stateItems?: T[] // only if multidrag, otherwise undefined
 }
