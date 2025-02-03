@@ -30,7 +30,7 @@
   "devDependencies": {
     "bun-plugin-dts": "0.2.1",
     "typescript": "5.7.3",
-    "@types/bun": "1.1.17"
+    "@types/bun": "1.2.2"
   },
   "keywords": [
     "react",
