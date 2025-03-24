@@ -22,8 +22,8 @@
     "build": "bun run build.ts --bun"
   },
   "peerDependencies": {
-    "react": "^17.0.0 || ^18.0.0",
-    "@types/react": "^17.0.0 || ^18.0.0",
+    "react": ">=17.0.0",
+    "@types/react": ">=17.0.0",
     "sortablejs": "^1.0.0",
     "@types/sortablejs": "^1.0.0"
   },
