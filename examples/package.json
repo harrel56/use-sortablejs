@@ -12,26 +12,26 @@
   },
   "dependencies": {
     "prismjs": "1.30.0",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
     "sortablejs": "1.15.6",
     "use-sortablejs": "*"
   },
   "devDependencies": {
-    "@babel/preset-env": "7.28.0",
+    "@babel/preset-env": "7.28.3",
     "@babel/preset-typescript": "7.27.1",
     "@types/jest": "30.0.0",
-    "@types/react": "19.1.8",
-    "@types/react-dom": "19.1.6",
+    "@types/react": "19.1.11",
+    "@types/react-dom": "19.1.7",
     "@types/sortablejs": "1.15.8",
     "@types/prismjs": "1.26.5",
-    "jest": "30.0.4",
-    "playwright": "1.54.1",
-    "playwright-core": "1.54.1",
-    "@playwright/browser-chromium": "1.54.1",
-    "ts-loader": "9.5.2",
-    "typescript": "5.8.3",
-    "webpack": "5.100.1",
+    "jest": "30.0.5",
+    "playwright": "1.55.0",
+    "playwright-core": "1.55.0",
+    "@playwright/browser-chromium": "1.55.0",
+    "ts-loader": "9.5.4",
+    "typescript": "5.9.2",
+    "webpack": "5.101.3",
     "webpack-cli": "6.0.1"
   }
 }
