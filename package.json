@@ -29,8 +29,8 @@
   },
   "devDependencies": {
     "bun-plugin-dts": "0.2.1",
-    "typescript": "5.9.2",
-    "@types/bun": "1.2.22"
+    "typescript": "5.9.3",
+    "@types/bun": "1.2.23"
   },
   "keywords": [
     "react",
